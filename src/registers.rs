@@ -1,15 +1,9 @@
-pub struct Registers {
-    a: u8,
-    b: u8,
-    c: u8,
-    d: u8,
-    e: u8,
-    f: FlagRegister,
-    h: u8,
-    l: u8,
-}
+const ZERO_FLAG_BYTE_POSITION: u8 = 7;
+const SUBTRACT_FLAG_BYTE_POSITION: u8 = 6;
+const HALF_CARRY_FLAG_BYTE_POSITION: u8 = 5;
+const CARRY_FLAG_BYTE_POSITION: u8 = 4;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Debug)]
 struct FlagRegister {
     zero: bool,
     subtract: bool,
@@ -17,15 +11,11 @@ struct FlagRegister {
     carry: bool
 }
 
-const ZERO_FLAG_BYTE_POSITION: u8 = 7;
-const SUBTRACT_FLAG_BYTE_POSITION: u8 = 6;
-const HALF_CARRY_FLAG_BYTE_POSITION: u8 = 5;
-const CARRY_FLAG_BYTE_POSITION: u8 = 4;
 
 impl std::convert::From<FlagRegister> for u8 {
     fn from(flag: FlagRegister) -> u8 {
         (if flag.zero {1} else {0}) << ZERO_FLAG_BYTE_POSITION |
-        (if flag.subtract {1} else {9}) << SUBTRACT_FLAG_BYTE_POSITION |
+        (if flag.subtract {1} else {0}) << SUBTRACT_FLAG_BYTE_POSITION |
         (if flag.half_carry {1} else {0}) << HALF_CARRY_FLAG_BYTE_POSITION |
         (if flag.carry {1} else {0}) << CARRY_FLAG_BYTE_POSITION
     }
@@ -53,6 +43,17 @@ impl FlagRegister {
     }
 }
 
+#[derive(Clone, Copy, PartialEq, Debug)]
+pub struct Registers {
+    a: u8,
+    b: u8,
+    c: u8,
+    d: u8,
+    e: u8,
+    f: FlagRegister,
+    h: u8,
+    l: u8,
+}
 
 impl Registers {
     pub fn new() -> Registers {
@@ -81,8 +82,8 @@ impl Registers {
     }
 
     pub fn set_bc(&mut self, value: u16) {
-        self.a = (value >> 8) as u8;
-        self.f = ((value & 0x00FF) as u8).into();
+        self.b = (value >> 8) as u8;
+        self.c = (value & 0x00FF) as u8;
     }
 
     pub  fn set_de(&mut self, value: u16) {
@@ -93,5 +94,52 @@ impl Registers {
     pub fn set_hl(&mut self, value: u16) {
         self.h = (value >> 8) as u8;
         self.l = (value & 0x00FF) as u8;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn can_set_bc() {
+        let mut registers = Registers::new();
+        registers.set_bc(0xAFCC);
+        assert_eq!(registers.b, 0xAFu8);
+        assert_eq!(registers.c, 0xCCu8);    
+    }
+
+    #[test]
+    fn can_set_f_as_u8() {
+        let mut registers = Registers::new();
+        let value = 0xC0;
+        registers.f = value.into();
+        let result: u8 = registers.f.into();
+        assert_eq!(result, value);
+    }
+
+    #[test]
+    fn can_set_f_as_flags_struct() {
+        let mut registers = Registers::new();
+        let value: FlagRegister = 0xC0.into();
+        registers.f = value;
+        assert_eq!(registers.f, value);
+    }
+
+    #[test]
+    fn can_be_converted_to_u8() {
+        let mut flags = FlagRegister::new();
+        flags.zero = true;
+        flags.carry = true;
+        let result: u8 = flags.into();
+        assert_eq!(result, 0x90u8);
+    }
+
+    #[test]
+    fn can_be_converted_from_u8() {
+        let result: FlagRegister = 0x90.into();
+        assert_eq!(result.zero, true);
+        assert_eq!(result.carry, true);
+        assert_eq!(result.half_carry, false);
+        assert_eq!(result.subtract, false);
     }
 }
