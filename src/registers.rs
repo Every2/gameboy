@@ -60,19 +60,19 @@ impl Registers {
         Registers { a: 0, b: 0, c: 0, d: 0, e: 0, f: FlagRegister::new(), h: 0, l: 0 }
     }
 
-    pub  fn af(&self) -> u16 {
+    pub fn af(&self) -> u16 {
         ((self.a as u16) << 8)| u8::from(self.f) as u16
     }
 
-    pub  fn bc(&self) -> u16 {
+    pub fn bc(&self) -> u16 {
         ((self.b as u16) << 8)| (self.c as u16)
     }
 
-    pub  fn de(&self) -> u16 {
+    pub fn de(&self) -> u16 {
         ((self.d as u16) << 8)| (self.e as u16)
     }
 
-    pub  fn hl(&self) -> u16 {
+    pub fn hl(&self) -> u16 {
         ((self.h as u16) << 8)| (self.l as u16)
     }
 
@@ -86,7 +86,7 @@ impl Registers {
         self.c = (value & 0x00FF) as u8;
     }
 
-    pub  fn set_de(&mut self, value: u16) {
+    pub fn set_de(&mut self, value: u16) {
         self.d = (value >> 8) as u8;
         self.e = (value & 0x00FF) as u8;
     }
@@ -137,9 +137,9 @@ mod tests {
     #[test]
     fn can_be_converted_from_u8() {
         let result: FlagRegister = 0x90.into();
-        assert_eq!(result.zero, true);
-        assert_eq!(result.carry, true);
-        assert_eq!(result.half_carry, false);
-        assert_eq!(result.subtract, false);
+        assert!(result.zero);
+        assert!(result.carry);
+        assert!(!result.half_carry);
+        assert!(!result.subtract);
     }
 }
