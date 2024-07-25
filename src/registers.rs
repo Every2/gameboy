@@ -4,11 +4,11 @@ const HALF_CARRY_FLAG_BYTE_POSITION: u8 = 5;
 const CARRY_FLAG_BYTE_POSITION: u8 = 4;
 
 #[derive(Clone, Copy, PartialEq, Debug)]
-struct FlagRegister {
-    zero: bool,
-    subtract: bool,
-    half_carry: bool,
-    carry: bool
+pub struct FlagRegister {
+    pub zero: bool,
+    pub subtract: bool,
+    pub half_carry: bool,
+    pub carry: bool
 }
 
 
@@ -45,14 +45,14 @@ impl FlagRegister {
 
 #[derive(Clone, Copy, PartialEq, Debug)]
 pub struct Registers {
-    a: u8,
-    b: u8,
-    c: u8,
-    d: u8,
-    e: u8,
-    f: FlagRegister,
-    h: u8,
-    l: u8,
+    pub a: u8,
+    pub b: u8,
+    pub c: u8,
+    pub d: u8,
+    pub e: u8,
+    pub f: FlagRegister,
+    pub h: u8,
+    pub l: u8,
 }
 
 impl Registers {
