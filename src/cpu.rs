@@ -16,10 +16,6 @@ impl Cpu {
         }
     }
 
-    fn pc(&self) -> u16 {
-        self.pc
-    }
-
     pub fn set_pc(&mut self, pc: u16) {
         self.pc = pc;
     }

@@ -288,9 +288,217 @@ fn rlca(cpu: &mut Cpu) {
     let c = cpu.registers.a >> 7;
 
     cpu.registers.a = cpu.registers.a << 1 | c;
+    
+    cpu.registers.f.carry = c != 0;
+    cpu.registers.f.zero = false;
+    cpu.registers.f.half_carry = false;
+    cpu.registers.f.subtract = false;
+}
+
+fn rla(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let new_carry = (a >> 7) != 0;
+    let old_carry = cpu.registers.f.carry as u8;
+
+    cpu.registers.a = (a << 1) | old_carry;
+
+    cpu.registers.f.carry = new_carry;
+    cpu.registers.f.zero = false;
+    cpu.registers.f.half_carry = false;
+    cpu.registers.f.subtract = false;
+}
+
+fn rrca(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+
+    let c = a & 1;
+
+    cpu.registers.a = (a >> 1) | (c << 7);
 
     cpu.registers.f.carry = c != 0;
     cpu.registers.f.zero = false;
     cpu.registers.f.half_carry = false;
     cpu.registers.f.subtract = false;
+}
+
+fn rra(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+
+    let new_carry = (a & 1) != 0;
+    let oldcarry = cpu.registers.f.carry as u8;
+
+    cpu.registers.a = (a >> 1) | (oldcarry << 7);
+
+    cpu.registers.f.carry = new_carry;
+    cpu.registers.f.zero = false;
+    cpu.registers.f.half_carry = false;
+    cpu.registers.f.subtract = false;
+}
+
+fn cpl(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+
+    cpu.registers.a = !a;
+
+    cpu.registers.f.subtract = true;
+    cpu.registers.f.half_carry = true;
+}
+
+fn daa(cpu: &mut Cpu) {
+    let mut adjust = 0;
+    if cpu.registers.f.half_carry {
+        adjust |= 0x06;
+    }
+
+    if cpu.registers.f.carry {
+        adjust |= 0x60;
+    }
+
+    let res = if cpu.registers.f.subtract {
+        cpu.registers.a.wrapping_sub(adjust)
+    } else {
+        if cpu.registers.a & 0x0F > 0x09 {
+            adjust |= 0x06;
+        }
+
+        if cpu.registers.a > 0x99 {
+            adjust |= 0x60;
+        }
+
+        cpu.registers.a.wrapping_add(adjust)
+    };
+
+    cpu.registers.a = res;
+
+    cpu.registers.f.zero = res == 0;
+    cpu.registers.f.carry = adjust & 0x60 != 0;
+    cpu.registers.f.half_carry = false;
+}
+
+fn ccf(cpu: &mut Cpu) {
+    let carry = cpu.registers.f.carry;
+
+    cpu.registers.f.carry = !carry;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+}
+
+fn scf(cpu: &mut Cpu) {
+    cpu.registers.f.carry = true;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+}
+
+fn ld_a_n(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_b_n(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_c_n(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_d_n(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_e_n(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_h_n(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_l_n(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_a_a(_: &mut Cpu) {}
+
+fn ld_b_b(_: &mut Cpu) {}
+
+fn ld_c_c(_: &mut Cpu) {}
+
+fn ld_d_d(_: &mut Cpu) {}
+
+fn ld_e_e(_: &mut Cpu) {}
+
+fn ld_h_h(_: &mut Cpu) {}
+
+fn ld_l_l(_: &mut Cpu) {}
+
+fn ld_a_b(cpu: &mut Cpu) {
+    let v = cpu.registers.b;
+
+    cpu.registers.a = v;
+}
+
+fn ld_a_c(cpu: &mut Cpu) {
+    let v = cpu.registers.c;
+
+    cpu.registers.a = v;
+}
+
+fn ld_a_d(cpu: &mut Cpu) {
+    let v = cpu.registers.d;
+
+    cpu.registers.a = v;
+}
+
+fn ld_a_e(cpu: &mut Cpu) {
+    let v = cpu.registers.e;
+
+    cpu.registers.a = v;
+}
+
+fn ld_a_h(cpu: &mut Cpu) {
+    let v = cpu.registers.h;
+
+    cpu.registers.a = v;
+}
+
+fn ld_a_l(cpu: &mut Cpu) {
+    let v = cpu.registers.l;
+
+    cpu.registers.a = v;
+}
+
+fn ld_a_mbc(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_a_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_b_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_c_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_d_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_e_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_h_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_l_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_a_mnn(cpu: &mut Cpu) {
+    todo!()
 }
