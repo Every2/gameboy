@@ -1,4 +1,4 @@
-use crate::{cpu::Cpu, registers::FlagRegister};
+use crate::{cpu::Cpu, registers::{self, FlagRegister}};
 
 pub static OPCODES: [(fn(&mut Cpu), &str); 0x100] = [
     //Opcodes 0X
@@ -261,7 +261,7 @@ pub static OPCODES: [(fn(&mut Cpu), &str); 0x100] = [
     (ldh_a_mc, "LDH A, [C]"),
     (di, "DI"),
     (undefined, "UNDEFINED"),
-    (push_a_f, "PUSH A, F"),
+    (push_af, "PUSH A, F"),
     (or_a_n, "OR A, N"),
     (rst_30, "RST 30"),
     (ld_hl_sp_sn, "LD HL, SP, SN"),
@@ -471,6 +471,10 @@ fn ld_a_mbc(cpu: &mut Cpu) {
     todo!()
 }
 
+fn ld_a_mde(cpu: &mut Cpu) {
+    todo!()
+}
+
 fn ld_a_mhl(cpu: &mut Cpu) {
     todo!()
 }
@@ -501,4 +505,952 @@ fn ld_l_mhl(cpu: &mut Cpu) {
 
 fn ld_a_mnn(cpu: &mut Cpu) {
     todo!()
+}
+
+fn ld_b_a(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+
+    cpu.registers.b = a;
+}
+
+fn ld_c_a(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+
+    cpu.registers.c = a;
+}
+
+fn ld_d_a(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+
+    cpu.registers.d = a;
+}
+
+fn ld_e_a(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+
+    cpu.registers.e = a;
+}
+
+fn ld_h_a(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+
+    cpu.registers.h = a;
+}
+
+fn ld_l_a(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+
+    cpu.registers.l = a;
+}
+
+fn ld_mbc_a(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_mde_a(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_mhl_a(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_mhl_b(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_mhl_c(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_mhl_d(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_mhl_e(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_mhl_h(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_mhl_l(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_mhl_n(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_mnn_a(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_mnn_sp(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_bc_nn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_de_nn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_hl_nn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_hl_sp_sn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_sp_nn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_sp_hl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ld_b_c(cpu: &mut Cpu) {
+    let c = cpu.registers.c;
+
+    cpu.registers.b = c;
+}
+
+fn ld_b_d(cpu: &mut Cpu) {
+    let d = cpu.registers.d;
+
+    cpu.registers.b = d;
+}
+
+fn ld_b_e(cpu: &mut Cpu) {
+    let e = cpu.registers.e;
+
+    cpu.registers.b = e;
+}
+
+fn ld_b_h(cpu: &mut Cpu) {
+    let h = cpu.registers.h;
+
+    cpu.registers.b = h;
+}
+
+fn ld_b_l(cpu: &mut Cpu) {
+    let l = cpu.registers.l;
+
+    cpu.registers.b = l;
+}
+
+fn ld_c_b(cpu: &mut Cpu) {
+    let b = cpu.registers.b;
+
+    cpu.registers.c = b;
+}
+
+fn ld_c_d(cpu: &mut Cpu) {
+    let d = cpu.registers.d;
+
+    cpu.registers.c = d;
+}
+
+fn ld_c_e(cpu: &mut Cpu) {
+    let e = cpu.registers.e;
+
+    cpu.registers.c = e;
+}
+
+fn ld_c_h(cpu: &mut Cpu) {
+    let h = cpu.registers.h;
+
+    cpu.registers.c = h;
+}
+
+fn ld_c_l(cpu: &mut Cpu) {
+    let l = cpu.registers.l;
+
+    cpu.registers.c = l;
+}
+
+fn ld_d_b(cpu: &mut Cpu) {
+    let b = cpu.registers.b;
+
+    cpu.registers.d = b;
+}
+
+fn ld_d_c(cpu: &mut Cpu) {
+    let c = cpu.registers.c;
+
+    cpu.registers.d = c;
+}
+
+fn ld_d_e(cpu: &mut Cpu) {
+    let e = cpu.registers.e;
+
+    cpu.registers.d = e;
+}
+
+fn ld_d_h(cpu: &mut Cpu) {
+    let h = cpu.registers.h;
+
+    cpu.registers.d = h;
+}
+
+fn ld_d_l(cpu: &mut Cpu) {
+    let l = cpu.registers.l;
+
+    cpu.registers.d = l;
+}
+
+fn ld_e_b(cpu: &mut Cpu) {
+    let b = cpu.registers.b;
+
+    cpu.registers.e = b;
+}
+
+fn ld_e_c(cpu: &mut Cpu) {
+    let c = cpu.registers.c;
+
+    cpu.registers.e = c;
+}
+
+fn ld_e_d(cpu: &mut Cpu) {
+    let d = cpu.registers.d;
+
+    cpu.registers.e = d;
+}
+
+fn ld_e_h(cpu: &mut Cpu) {
+    let h = cpu.registers.h;
+
+    cpu.registers.e = h;
+}
+
+fn ld_e_l(cpu: &mut Cpu) {
+    let l = cpu.registers.l;
+
+    cpu.registers.e = l;
+}
+
+fn ld_h_b(cpu: &mut Cpu) {
+    let b = cpu.registers.b;
+
+    cpu.registers.h = b;
+}
+
+fn ld_h_c(cpu: &mut Cpu) {
+    let c = cpu.registers.c;
+
+    cpu.registers.h = c;
+}
+
+fn ld_h_d(cpu: &mut Cpu) {
+    let d = cpu.registers.d;
+
+    cpu.registers.h = d;
+}
+
+fn ld_h_e(cpu: &mut Cpu) {
+    let e = cpu.registers.e;
+
+    cpu.registers.h = e;
+}
+
+fn ld_l_b(cpu: &mut Cpu) {
+    let b = cpu.registers.b;
+
+    cpu.registers.l = b;
+}
+
+fn ld_l_c(cpu: &mut Cpu) {
+    let c = cpu.registers.c;
+
+    cpu.registers.l = c;
+}
+
+fn ld_l_d(cpu: &mut Cpu) {
+    let d = cpu.registers.d;
+
+    cpu.registers.l = d;
+}
+
+fn ld_l_e(cpu: &mut Cpu) {
+    let e = cpu.registers.e;
+
+    cpu.registers.l = e;
+}
+
+fn ld_l_h(cpu: &mut Cpu) {
+    let h = cpu.registers.h;
+
+    cpu.registers.l = h;
+}
+
+fn ld_h_l(cpu: &mut Cpu) {
+    let l = cpu.registers.l;
+
+    cpu.registers.h = l;
+}
+
+fn pop_af(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn pop_bc(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn pop_de(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn pop_hl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn push_af(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn push_bc(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn push_de(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn push_hl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn jp_nn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn jp_hl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn jp_nz_nn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn jp_z_nn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn jp_nc_nn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn jp_c_nn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn jr_sn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn jr_nz_sn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn jr_z_sn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn jr_nc_sn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn jr_c_sn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn rst(cpu: &mut Cpu, addr: u16) {
+    todo!()
+}
+
+fn rst_00(cpu: &mut Cpu) {
+    rst(cpu, 0x00);
+}
+
+fn rst_08(cpu: &mut Cpu) {
+    rst(cpu, 0x08);
+}
+
+fn rst_10(cpu: &mut Cpu) {
+    rst(cpu, 0x10);
+}
+
+fn rst_18(cpu: &mut Cpu) {
+    rst(cpu, 0x18);
+}
+
+fn rst_20(cpu: &mut Cpu) {
+    rst(cpu, 0x20);
+}
+
+
+fn rst_28(cpu: &mut Cpu) {
+    rst(cpu, 0x28);
+}
+
+fn rst_30(cpu: &mut Cpu) {
+    rst(cpu, 0x30);
+}
+
+fn rst_38(cpu: &mut Cpu) {
+    rst(cpu, 0x38);
+}
+
+fn call_nn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn call_nz_nn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn call_z_nn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn call_nc_nn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn call_c_nn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ret(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn reti(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ret_nz(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ret_z(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ret_nc(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ret_c(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ldd_mhl_a(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ldd_a_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ldi_mhl_a(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ldi_a_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ldh_mn_a(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ldh_mc_a(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ldh_a_mn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ldh_a_mc(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn dec_a(cpu: &mut Cpu) {
+    let mut a = cpu.registers.a;
+
+    cpu.registers.f.half_carry = a & 0xf == 0;
+
+    a = a.wrapping_sub(1);
+
+    cpu.registers.a = a;
+
+    cpu.registers.f.zero = a == 0;
+    cpu.registers.f.zero = true;
+}
+
+fn dec_b(cpu: &mut Cpu) {
+    let mut b = cpu.registers.b;
+
+    cpu.registers.f.half_carry = b & 0xf == 0;
+
+    b = b.wrapping_sub(1);
+
+    cpu.registers.b = b;
+
+    cpu.registers.f.zero = b == 0;
+    cpu.registers.f.zero = true;
+}
+
+fn dec_c(cpu: &mut Cpu) {
+    let mut c = cpu.registers.c;
+
+    cpu.registers.f.half_carry = c & 0xf == 0;
+
+    c = c.wrapping_sub(1);
+
+    cpu.registers.c = c;
+
+    cpu.registers.f.zero = c == 0;
+    cpu.registers.f.zero = true;
+}
+
+fn dec_d(cpu: &mut Cpu) {
+    let mut d = cpu.registers.d;
+
+    cpu.registers.f.half_carry = d & 0xf == 0;
+
+    d = d.wrapping_sub(1);
+
+    cpu.registers.d = d;
+
+    cpu.registers.f.zero = d == 0;
+    cpu.registers.f.zero = true;
+}
+
+fn dec_e(cpu: &mut Cpu) {
+    let mut e = cpu.registers.e;
+
+    cpu.registers.f.half_carry = e & 0xf == 0;
+
+    e = e.wrapping_sub(1);
+
+    cpu.registers.e = e;
+
+    cpu.registers.f.zero = e == 0;
+    cpu.registers.f.zero = true;
+}
+
+fn dec_h(cpu: &mut Cpu) {
+    let mut h = cpu.registers.h;
+
+    cpu.registers.f.half_carry = h & 0xf == 0;
+
+    h = h.wrapping_sub(1);
+
+    cpu.registers.h = h;
+
+    cpu.registers.f.zero = h == 0;
+    cpu.registers.f.zero = true;
+}
+
+fn dec_l(cpu: &mut Cpu) {
+    let mut l = cpu.registers.l;
+
+    cpu.registers.f.half_carry = l & 0xf == 0;
+
+    l = l.wrapping_sub(1);
+
+    cpu.registers.l = l;
+
+    cpu.registers.f.zero = l == 0;
+    cpu.registers.f.zero = true;
+}
+
+fn dec_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn inc_a(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+
+    let r = a.wrapping_add(1);
+
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.half_carry = a & 0xf == 0xf;
+
+    cpu.registers.a = r;
+}
+
+fn inc_b(cpu: &mut Cpu) {
+    let b = cpu.registers.b;
+
+    let r = b.wrapping_add(1);
+
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.half_carry = b & 0xf == 0xf;
+
+    cpu.registers.b = r;
+}
+
+fn inc_c(cpu: &mut Cpu) {
+    let c = cpu.registers.c;
+
+    let r = c.wrapping_add(1);
+
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.half_carry = c & 0xf == 0xf;
+
+    cpu.registers.c = r;
+}
+
+fn inc_d(cpu: &mut Cpu) {
+    let d = cpu.registers.d;
+
+    let r = d.wrapping_add(1);
+
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.zero =  r == 0;
+    cpu.registers.f.half_carry = d & 0xf == 0xf;
+
+    cpu.registers.d = r;
+}
+
+fn inc_e(cpu: &mut Cpu) {
+    let e = cpu.registers.e;
+
+    let r = e.wrapping_add(1);
+
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.half_carry = e & 0xf == 0xf;
+
+    cpu.registers.e = r;
+}
+
+fn inc_h(cpu: &mut Cpu) {
+    let h = cpu.registers.h;
+
+    let r = h.wrapping_add(1);
+
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.half_carry = h & 0xf == 0xf;
+
+    cpu.registers.h = r;
+}
+
+fn inc_l(cpu: &mut Cpu) {
+    let l = cpu.registers.l;
+
+    let r = l.wrapping_add(1);
+
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.half_carry = l & 0xf == 0xf;
+
+    cpu.registers.l = r;
+}
+
+fn inc_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn inc_bc(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn inc_de(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn inc_hl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn inc_sp(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn dec_bc(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn dec_de(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn dec_hl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn dec_sp(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn sub_and_set_flags(cpu: &mut Cpu, x: u8, y: u8) -> u8 {
+    let x = x as u32;
+    let y = y as u32;
+
+    let r = x.wrapping_sub(y);
+
+    let rb = r as u8;
+
+    cpu.registers.f.zero = rb == 0;
+    cpu.registers.f.half_carry = (x ^ y ^  r) &  0x10 != 0;
+    cpu.registers.f.half_carry =  r & 0x100 != 0;
+    cpu.registers.f.subtract = true;
+
+    rb
+}
+
+fn cp_a_a(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+
+    sub_and_set_flags(cpu, a, a);
+}
+
+fn cp_a_b(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let b = cpu.registers.b;
+
+    sub_and_set_flags(cpu, a, b);
+}
+
+fn cp_a_c(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let c = cpu.registers.c;
+
+    sub_and_set_flags(cpu, a, c);
+}
+
+fn cp_a_d(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let d = cpu.registers.d;
+
+    sub_and_set_flags(cpu, a, d);
+}
+
+fn cp_a_e(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let e = cpu.registers.e;
+
+    sub_and_set_flags(cpu, a, e);
+}
+
+fn cp_a_h(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let h = cpu.registers.h;
+
+    sub_and_set_flags(cpu, a, h);
+}
+
+fn cp_a_l(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let l = cpu.registers.l;
+
+    sub_and_set_flags(cpu, a, l);
+}
+
+fn cp_a_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn cp_a_n(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn sub_a_a(cpu: &mut Cpu) {
+    cpu.registers.f.zero = true;
+    cpu.registers.f.subtract = true;
+    cpu.registers.f.carry = false;
+    cpu.registers.f.half_carry = false;
+
+    cpu.registers.a = 0;
+}
+
+fn sub_a_b(cpu: &mut Cpu) {
+    let r = sub_and_set_flags(cpu, cpu.registers.a, cpu.registers.b);
+    cpu.registers.a = r;
+}
+
+
+fn sub_a_c(cpu: &mut Cpu) {
+    let r = sub_and_set_flags(cpu, cpu.registers.a, cpu.registers.c);
+    cpu.registers.a = r;
+}
+
+fn sub_a_d(cpu: &mut Cpu) {
+    let r = sub_and_set_flags(cpu, cpu.registers.a, cpu.registers.d);
+    cpu.registers.a = r;
+}
+
+fn sub_a_e(cpu: &mut Cpu) {
+    let r = sub_and_set_flags(cpu, cpu.registers.a, cpu.registers.e);
+    cpu.registers.a = r;
+}
+
+fn sub_a_h(cpu: &mut Cpu) {
+    let r = sub_and_set_flags(cpu, cpu.registers.a, cpu.registers.h);
+    cpu.registers.a = r;
+}
+
+fn sub_a_l(cpu: &mut Cpu) {
+    let r = sub_and_set_flags(cpu, cpu.registers.a, cpu.registers.l);
+    cpu.registers.a = r;
+}
+
+fn sub_a_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn sub_a_n(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn sub_with_carry_and_set_flags(cpu: &mut Cpu, x: u8, y: u8) -> u8 {
+    let x = x as u32;
+    let y = y as u32;
+    let carry = cpu.registers.f.carry as u32;
+
+    let r = x.wrapping_sub(y).wrapping_sub(carry);
+
+    let rb = r as u8;
+
+    cpu.registers.f.zero = rb == 0;
+    cpu.registers.f.half_carry = (x ^ y ^  r) &  0x10 != 0;
+    cpu.registers.f.half_carry =  r & 0x100 != 0;
+    cpu.registers.f.subtract = true;
+
+    rb
+}
+
+fn sbc_a_a(cpu: &mut Cpu) {
+    let r = sub_with_carry_and_set_flags(cpu, cpu.registers.a, cpu.registers.a);
+    cpu.registers.a = r;
+}
+
+fn sbc_a_b(cpu: &mut Cpu) {
+    let r = sub_with_carry_and_set_flags(cpu, cpu.registers.a, cpu.registers.b);
+    cpu.registers.a = r;
+}
+
+fn sbc_a_c(cpu: &mut Cpu) {
+    let r = sub_with_carry_and_set_flags(cpu, cpu.registers.a, cpu.registers.c);
+    cpu.registers.a = r;
+}
+
+fn sbc_a_d(cpu: &mut Cpu) {
+    let r = sub_with_carry_and_set_flags(cpu, cpu.registers.a, cpu.registers.d);
+    cpu.registers.a = r;
+}
+
+fn sbc_a_e(cpu: &mut Cpu) {
+    let r = sub_with_carry_and_set_flags(cpu, cpu.registers.a, cpu.registers.e);
+    cpu.registers.a = r;
+}
+
+fn sbc_a_h(cpu: &mut Cpu) {
+    let r = sub_with_carry_and_set_flags(cpu, cpu.registers.a, cpu.registers.h);
+    cpu.registers.a = r;
+}
+
+fn sbc_a_l(cpu: &mut Cpu) {
+    let r = sub_with_carry_and_set_flags(cpu, cpu.registers.a, cpu.registers.l);
+    cpu.registers.a = r;
+}
+
+fn sbc_a_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn sbc_a_n(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn add_and_set_flags(cpu: &mut Cpu, x: u8, y: u8) -> u8 {
+    let x = x as u32;
+    let y = y as u32;
+
+    let r = x.wrapping_add(y);
+
+    let rb = r as u8;
+
+    cpu.registers.f.zero = rb == 0;
+    cpu.registers.f.half_carry = (x ^ y ^  r) &  0x10 != 0;
+    cpu.registers.f.half_carry =  r & 0x100 != 0;
+    cpu.registers.f.subtract = false;
+
+    rb
+}
+
+fn add_a_a(cpu: &mut Cpu) {
+    let r = add_and_set_flags(cpu, cpu.registers.a, cpu.registers.a);
+    cpu.registers.a = r;
+}
+
+fn add_a_b(cpu: &mut Cpu) {
+    let r = add_and_set_flags(cpu, cpu.registers.a, cpu.registers.b);
+    cpu.registers.a = r;
+}
+
+fn add_a_c(cpu: &mut Cpu) {
+    let r = add_and_set_flags(cpu, cpu.registers.a, cpu.registers.c);
+    cpu.registers.a = r;
+}
+
+fn add_a_d(cpu: &mut Cpu) {
+    let r = add_and_set_flags(cpu, cpu.registers.a, cpu.registers.d);
+    cpu.registers.a = r;
+}
+
+fn add_a_e(cpu: &mut Cpu) {
+    let r = add_and_set_flags(cpu, cpu.registers.a, cpu.registers.e);
+    cpu.registers.a = r;
+}
+
+fn add_a_h(cpu: &mut Cpu) {
+    let r = add_and_set_flags(cpu, cpu.registers.a, cpu.registers.h);
+    cpu.registers.a = r;
+}
+
+fn add_a_l(cpu: &mut Cpu) {
+    let r = add_and_set_flags(cpu, cpu.registers.a, cpu.registers.l);
+    cpu.registers.a = r;
+}
+
+fn add_a_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn add_a_n(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn add_with_carry_and_set_flags(cpu: &mut Cpu, x: u8, y: u8) -> u8 {
+    let x = x as u32;
+    let y = y as u32;
+    let carry = cpu.registers.f.carry as u32;
+
+    let r = x.wrapping_add(y).wrapping_add(carry);
+
+    let rb = r as u8;
+
+    cpu.registers.f.zero = rb == 0;
+    cpu.registers.f.half_carry = (x ^ y ^  r) &  0x10 != 0;
+    cpu.registers.f.half_carry =  r & 0x100 != 0;
+    cpu.registers.f.subtract = false;
+
+    rb
 }
