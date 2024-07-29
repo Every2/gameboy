@@ -1454,3 +1454,357 @@ fn add_with_carry_and_set_flags(cpu: &mut Cpu, x: u8, y: u8) -> u8 {
 
     rb
 }
+
+fn adc_a_a(cpu: &mut Cpu) {
+    let r = add_with_carry_and_set_flags(cpu, cpu.registers.a, cpu.registers.a);
+    cpu.registers.a = r;
+}
+
+fn adc_a_b(cpu: &mut Cpu) {
+    let r = add_with_carry_and_set_flags(cpu, cpu.registers.a, cpu.registers.b);
+    cpu.registers.a = r;
+}
+
+fn adc_a_c(cpu: &mut Cpu) {
+    let r = add_with_carry_and_set_flags(cpu, cpu.registers.a, cpu.registers.c);
+    cpu.registers.a = r;
+}
+
+fn adc_a_d(cpu: &mut Cpu) {
+    let r = add_with_carry_and_set_flags(cpu, cpu.registers.a, cpu.registers.d);
+    cpu.registers.a = r;
+}
+
+fn adc_a_e(cpu: &mut Cpu) {
+    let r = add_with_carry_and_set_flags(cpu, cpu.registers.a, cpu.registers.e);
+    cpu.registers.a = r;
+}
+
+fn adc_a_h(cpu: &mut Cpu) {
+    let r = add_with_carry_and_set_flags(cpu, cpu.registers.a, cpu.registers.h);
+    cpu.registers.a = r;
+}
+
+fn adc_a_l(cpu: &mut Cpu) {
+    let r = add_with_carry_and_set_flags(cpu, cpu.registers.a, cpu.registers.l);
+    cpu.registers.a = r;
+}
+
+fn adc_a_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn adc_a_n(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn add_word_and_set_flags(cpu: &mut Cpu, x: u16, y: u16) -> u16 {
+    todo!()
+}
+
+fn add_hl_bc(cpu: &mut Cpu) {
+    let r = add_word_and_set_flags(cpu, cpu.registers.hl(), cpu.registers.bc());
+
+    cpu.registers.set_hl(r);
+}
+
+fn add_hl_de(cpu: &mut Cpu) {
+    let r = add_word_and_set_flags(cpu, cpu.registers.hl(), cpu.registers.de());
+
+    cpu.registers.set_hl(r);
+}
+
+fn add_hl_hl(cpu: &mut Cpu) {
+    let r = add_word_and_set_flags(cpu, cpu.registers.hl(), cpu.registers.hl());
+
+    cpu.registers.set_hl(r);
+}
+
+fn add_hl_sp(cpu: &mut Cpu) {
+    let r = add_word_and_set_flags(cpu, cpu.registers.hl(), cpu.sp);
+
+    cpu.registers.set_hl(r);
+}
+
+fn add_sp_sn(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn and_a_a(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+
+    cpu.registers.f.zero = a == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = true;
+    cpu.registers.f.carry = false;
+}
+
+fn and_a_b(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let b = cpu.registers.b;
+
+    let r = a & b;
+
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = true;
+    cpu.registers.f.carry = false;
+
+    cpu.registers.a = r;
+}
+
+fn and_a_c(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let c = cpu.registers.b;
+
+    let r = a & c;
+
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = true;
+    cpu.registers.f.carry = false;
+
+    cpu.registers.a = r;
+}
+
+fn and_a_d(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let d = cpu.registers.d;
+
+    let r = a & d;
+
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = true;
+    cpu.registers.f.carry = false;
+
+    cpu.registers.a = r;
+}
+
+fn and_a_e(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let e = cpu.registers.e;
+
+    let r = a & e;
+
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = true;
+    cpu.registers.f.carry = false;
+
+    cpu.registers.a = r;
+}
+
+fn and_a_h(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let h = cpu.registers.h;
+
+    let r = a & h;
+
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = true;
+    cpu.registers.f.carry = false;
+
+    cpu.registers.a = r;
+}
+
+fn and_a_l(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let l = cpu.registers.l;
+
+    let r = a & l;
+
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = true;
+    cpu.registers.f.carry = false;
+
+    cpu.registers.a = r;
+}
+
+fn and_a_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn and_a_n(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn or_a_a(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+
+    cpu.registers.f.zero = a == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+    cpu.registers.f.carry = false;
+}
+
+fn or_a_b(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let b = cpu.registers.b;
+
+    let r = a | b;
+
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+    cpu.registers.f.carry = false;
+
+    cpu.registers.a = r;
+}
+
+fn or_a_c(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let c = cpu.registers.c;
+
+    let r = a | c;
+
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+    cpu.registers.f.carry = false;
+
+    cpu.registers.a = r;
+}
+
+fn or_a_d(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let d = cpu.registers.d;
+
+    let r = a | d;
+
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+    cpu.registers.f.carry = false;
+
+    cpu.registers.a = r;
+}
+
+fn or_a_e(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let e = cpu.registers.e;
+
+    let r = a | e;
+
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+    cpu.registers.f.carry = false;
+
+    cpu.registers.a = r;
+}
+
+fn or_a_h(cpu: &mut Cpu) {
+    let a = cpu.registers.a;
+    let h = cpu.registers.h;
+
+    let r = a | h;
+
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+    cpu.registers.f.carry = false;
+
+    cpu.registers.a = r;
+}
+
+fn or_a_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn or_a_n(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn xor(cpu: &mut Cpu, n: u8, m: u8) -> u8 {
+    let r = n ^ m;
+
+    cpu.registers.f.carry = false;
+    cpu.registers.f.half_carry = false;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.zero = r == 0;
+
+    r
+}
+
+fn xor_a_a(cpu: &mut Cpu) {
+    cpu.registers.a = 0;
+
+    cpu.registers.f.carry = false;
+    cpu.registers.f.half_carry = false;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.zero = true;
+}
+
+fn xor_a_b(cpu: &mut Cpu) {
+    let r = xor(cpu, cpu.registers.a, cpu.registers.b);
+
+    cpu.registers.a = r;
+}
+
+fn xor_a_c(cpu: &mut Cpu) {
+    let r = xor(cpu, cpu.registers.a, cpu.registers.c);
+
+    cpu.registers.a = r;
+}
+
+fn xor_a_d(cpu: &mut Cpu) {
+    let r = xor(cpu, cpu.registers.a, cpu.registers.d);
+
+    cpu.registers.a = r;
+}
+
+fn xor_a_e(cpu: &mut Cpu) {
+    let r = xor(cpu, cpu.registers.a, cpu.registers.e);
+
+    cpu.registers.a = r;
+}
+
+fn xor_a_h(cpu: &mut Cpu) {
+    let r = xor(cpu, cpu.registers.a, cpu.registers.h);
+
+    cpu.registers.a = r;
+}
+
+fn xor_a_l(cpu: &mut Cpu) {
+    let r = xor(cpu, cpu.registers.a, cpu.registers.l);
+
+    cpu.registers.a = r;
+}
+
+fn xor_a_mhl(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn xor_a_n(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn or_a_l(cpu: &mut Cpu) {
+    let r = cpu.registers.a | cpu.registers.l;
+
+    cpu.registers.f.zero = r == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+    cpu.registers.f.zero = false;
+
+    cpu.registers.a = r;
+}
+
+fn di(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn ei(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn halt(cpu: &mut Cpu) {
+    todo!()
+}
+
+fn stop(cpu: &mut Cpu) {
+    todo!()
+}
