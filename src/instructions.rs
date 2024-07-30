@@ -1,4 +1,4 @@
-use crate::{cpu::Cpu, registers::{self, FlagRegister}};
+use crate::{cpu::Cpu, ram, registers::{self, FlagRegister}};
 
 pub static OPCODES: [(fn(&mut Cpu), &str); 0x100] = [
     //Opcodes 0X
@@ -390,7 +390,8 @@ fn scf(cpu: &mut Cpu) {
 }
 
 fn ld_a_n(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    cpu.registers.a = cpu.ram.read_byte(cpu.pc.into());
 }
 
 fn ld_b_n(cpu: &mut Cpu) {
