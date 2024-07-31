@@ -475,48 +475,60 @@ fn ld_a_l(cpu: &mut Cpu) {
 }
 
 fn ld_a_mbc(cpu: &mut Cpu) {
-    todo!()
+    let bc = cpu.registers.bc();
+    cpu.registers.a = cpu.external.ram.read_byte(bc);
 }
 
 fn ld_a_mde(cpu: &mut Cpu) {
-    todo!()
+    let de = cpu.registers.de();
+    cpu.registers.a = cpu.external.ram.read_byte(de);
 }
 
 fn ld_a_mhl(cpu: &mut Cpu) {
-    todo!()
+    let hl = cpu.registers.hl();
+    cpu.registers.a = cpu.external.ram.read_byte(hl);
 }
 
 fn ld_b_mhl(cpu: &mut Cpu) {
-    todo!()
+    let hl = cpu.registers.hl();
+    cpu.registers.b = cpu.external.ram.read_byte(hl);
 }
 
 fn ld_c_mhl(cpu: &mut Cpu) {
-    todo!()
+    let hl = cpu.registers.hl();
+    cpu.registers.c = cpu.external.ram.read_byte(hl);
 }
 
 fn ld_d_mhl(cpu: &mut Cpu) {
-    todo!()
+    let hl = cpu.registers.hl();
+    cpu.registers.d = cpu.external.ram.read_byte(hl);
 }
 
 fn ld_e_mhl(cpu: &mut Cpu) {
-    todo!()
+    let hl = cpu.registers.hl();
+    cpu.registers.e = cpu.external.ram.read_byte(hl);
 }
 
 fn ld_h_mhl(cpu: &mut Cpu) {
-    todo!()
+    let hl = cpu.registers.hl();
+    cpu.registers.h = cpu.external.ram.read_byte(hl);
 }
 
 fn ld_l_mhl(cpu: &mut Cpu) {
-    todo!()
+    let hl = cpu.registers.hl();
+    cpu.registers.l = cpu.external.ram.read_byte(hl);
 }
 
 fn ld_a_mnn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut address = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    address |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8;
+    cpu.registers.a = cpu.external.ram.read_byte(address);
 }
 
 fn ld_b_a(cpu: &mut Cpu) {
     let a = cpu.registers.a;
-
     cpu.registers.b = a;
 }
 
@@ -551,51 +563,62 @@ fn ld_l_a(cpu: &mut Cpu) {
 }
 
 fn ld_mbc_a(cpu: &mut Cpu) {
-    todo!()
+    cpu.external.ram.store_byte(cpu.registers.bc(), cpu.registers.a);
 }
 
 fn ld_mde_a(cpu: &mut Cpu) {
-    todo!()
+    cpu.external.ram.store_byte(cpu.registers.de(), cpu.registers.a);
 }
 
 fn ld_mhl_a(cpu: &mut Cpu) {
-    todo!()
+    cpu.external.ram.store_byte(cpu.registers.hl(), cpu.registers.a);
 }
 
 fn ld_mhl_b(cpu: &mut Cpu) {
-    todo!()
+    cpu.external.ram.store_byte(cpu.registers.hl(), cpu.registers.b);
 }
 
 fn ld_mhl_c(cpu: &mut Cpu) {
-    todo!()
+    cpu.external.ram.store_byte(cpu.registers.hl(), cpu.registers.c);
 }
 
 fn ld_mhl_d(cpu: &mut Cpu) {
-    todo!()
+    cpu.external.ram.store_byte(cpu.registers.hl(), cpu.registers.d);
 }
 
 fn ld_mhl_e(cpu: &mut Cpu) {
-    todo!()
+    cpu.external.ram.store_byte(cpu.registers.hl(), cpu.registers.e);
 }
 
 fn ld_mhl_h(cpu: &mut Cpu) {
-    todo!()
+    cpu.external.ram.store_byte(cpu.registers.hl(), cpu.registers.h);
 }
 
 fn ld_mhl_l(cpu: &mut Cpu) {
-    todo!()
+    cpu.external.ram.store_byte(cpu.registers.hl(), cpu.registers.l);
 }
 
 fn ld_mhl_n(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let n = cpu.external.ram.read_byte(cpu.pc);
+    cpu.external.ram.store_byte(cpu.registers.hl(), n);
 }
 
 fn ld_mnn_a(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut address = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    address |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8;
+    cpu.external.ram.store_byte(address, cpu.registers.a);
 }
 
 fn ld_mnn_sp(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut address = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    address |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8;
+    cpu.external.ram.store_byte(address, (cpu.sp & 0xFF) as u8);
+    cpu.external.ram.store_byte(address + 1, (cpu.sp >> 8) as u8);
 }
 
 fn ld_bc_nn(cpu: &mut Cpu) {
