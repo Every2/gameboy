@@ -10,7 +10,7 @@ impl Ram {
         }
     }
 
-    pub fn read_byte(&self, address: usize) -> u8 {
-        self.byte[address] 
+    pub fn read_byte(&self, address: u16) -> u8 {
+        self.byte[address as usize] 
     }
 }

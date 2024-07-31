@@ -391,7 +391,7 @@ fn scf(cpu: &mut Cpu) {
 
 fn ld_a_n(cpu: &mut Cpu) {
     cpu.set_pc(cpu.pc + 1);
-    cpu.registers.a = cpu.ram.read_byte(cpu.pc.into());
+    cpu.registers.a = cpu.external.ram.read_byte(cpu.pc);
 }
 
 fn ld_b_n(cpu: &mut Cpu) {

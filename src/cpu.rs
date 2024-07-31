@@ -1,11 +1,11 @@
-use crate::{ram::Ram, registers::Registers};
+use crate::{hardware::Hardware, ram::Ram, registers::Registers};
 
 
 pub struct Cpu {
     pub registers: Registers,
     pub pc: u16,
     pub sp: u16,
-    pub ram: Ram,
+    pub external: Hardware,
 }
 
 impl Cpu {
@@ -14,7 +14,7 @@ impl Cpu {
             registers: Registers::new(),
             pc: 0x0,
             sp: 0x00,
-            ram: Ram::new(),
+            external: Hardware::new(),
         }
     }
 
