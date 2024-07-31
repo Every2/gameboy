@@ -395,27 +395,33 @@ fn ld_a_n(cpu: &mut Cpu) {
 }
 
 fn ld_b_n(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    cpu.registers.b = cpu.external.ram.read_byte(cpu.pc);
 }
 
 fn ld_c_n(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    cpu.registers.c = cpu.external.ram.read_byte(cpu.pc);
 }
 
 fn ld_d_n(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    cpu.registers.d = cpu.external.ram.read_byte(cpu.pc);
 }
 
 fn ld_e_n(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    cpu.registers.e = cpu.external.ram.read_byte(cpu.pc);
 }
 
 fn ld_h_n(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    cpu.registers.h = cpu.external.ram.read_byte(cpu.pc);
 }
 
 fn ld_l_n(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    cpu.registers.l = cpu.external.ram.read_byte(cpu.pc);
 }
 
 fn ld_a_a(_: &mut Cpu) {}
