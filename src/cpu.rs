@@ -22,4 +22,17 @@ impl Cpu {
     pub fn set_pc(&mut self, pc: u16) {
         self.pc = pc;
     }
+
+    pub fn set_sp(&mut self, sp: u16) {
+        self.sp = sp;
+    }
+
+    pub fn pop_sp(&mut self) -> u16 {
+        let sp = self.sp;
+        let mut value = self.external.ram.read_byte(self.sp) as u16;
+        self.set_sp(sp + 1);
+        value |= (self.external.ram.read_byte(self.sp) as u16) << 8;
+        self.set_sp(sp + 1);
+        value
+    }
 }

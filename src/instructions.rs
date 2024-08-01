@@ -622,27 +622,53 @@ fn ld_mnn_sp(cpu: &mut Cpu) {
 }
 
 fn ld_bc_nn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut value = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    value |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8; 
+    cpu.registers.set_bc(value);
 }
 
 fn ld_de_nn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut value = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    value |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8; 
+    cpu.registers.set_de(value);
 }
 
 fn ld_hl_nn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut value = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    value |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8; 
+    cpu.registers.set_hl(value);
 }
 
 fn ld_hl_sp_sn(cpu: &mut Cpu) {
-    todo!()
+    let sp = cpu.sp as i32;
+    cpu.set_pc(cpu.pc + 1) ;
+    let n = cpu.external.ram.read_byte(cpu.pc) as i8;
+    let nn = n as i32;
+    let result = sp.wrapping_add(nn);
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.carry = (sp ^ nn ^ result) & 0x03 != 0;
+    cpu.registers.f.carry = (sp ^ nn ^ result) & 0x07 != 0;
+    cpu.registers.f.zero = false;
+
+    cpu.registers.set_hl(result as u16);
 }
 
 fn ld_sp_nn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut value = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    value |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8;
+    cpu.sp = value;
 }
 
 fn ld_sp_hl(cpu: &mut Cpu) {
-    todo!()
+    cpu.sp = cpu.registers.hl();
 }
 
 fn ld_b_c(cpu: &mut Cpu) {
@@ -826,7 +852,9 @@ fn ld_h_l(cpu: &mut Cpu) {
 }
 
 fn pop_af(cpu: &mut Cpu) {
-    todo!()
+    let value = cpu.pop_sp();
+
+    cpu.registers.set_af(value);
 }
 
 fn pop_bc(cpu: &mut Cpu) {
