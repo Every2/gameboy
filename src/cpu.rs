@@ -1,4 +1,4 @@
-use crate::{hardware::Hardware, ram::Ram, registers::Registers};
+use crate::{hardware::Hardware, registers::Registers};
 
 
 pub struct Cpu {
@@ -28,11 +28,17 @@ impl Cpu {
     }
 
     pub fn pop_sp(&mut self) -> u16 {
-        let sp = self.sp;
         let mut value = self.external.ram.read_byte(self.sp) as u16;
-        self.set_sp(sp + 1);
+        self.set_sp(self.sp + 1);
         value |= (self.external.ram.read_byte(self.sp) as u16) << 8;
-        self.set_sp(sp + 1);
+        self.set_sp(self.sp + 1);
         value
+    }
+
+    pub fn push_sp(&mut self, value: u16){
+        self.set_sp(self.sp - 1);
+        self.external.ram.store_byte(self.sp, (value >> 8) as u8);
+        self.set_sp(self.sp - 1);
+        self.external.ram.store_byte(self.sp, (value & 0xF0) as u8);
     }
 }

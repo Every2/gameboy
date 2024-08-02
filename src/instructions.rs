@@ -858,31 +858,37 @@ fn pop_af(cpu: &mut Cpu) {
 }
 
 fn pop_bc(cpu: &mut Cpu) {
-    todo!()
+    let value = cpu.pop_sp();
+
+    cpu.registers.set_bc(value);
 }
 
 fn pop_de(cpu: &mut Cpu) {
-    todo!()
+    let value = cpu.pop_sp();
+
+    cpu.registers.set_de(value);
 }
 
 fn pop_hl(cpu: &mut Cpu) {
-    todo!()
+    let value = cpu.pop_sp();
+
+    cpu.registers.set_hl(value);
 }
 
 fn push_af(cpu: &mut Cpu) {
-    todo!()
+    cpu.push_sp(cpu.registers.af());
 }
 
 fn push_bc(cpu: &mut Cpu) {
-    todo!()
+    cpu.push_sp(cpu.registers.bc());
 }
 
 fn push_de(cpu: &mut Cpu) {
-    todo!()
+    cpu.push_sp(cpu.registers.de());
 }
 
 fn push_hl(cpu: &mut Cpu) {
-    todo!()
+    cpu.push_sp(cpu.registers.hl());
 }
 
 fn jp_nn(cpu: &mut Cpu) {
