@@ -27,6 +27,10 @@ impl Cpu {
         self.sp = sp;
     }
 
+    pub fn load_pc(&mut self, pc: u16) {
+        self.set_pc(pc);
+    }
+
     pub fn pop_sp(&mut self) -> u16 {
         let mut value = self.external.ram.read_byte(self.sp) as u16;
         self.set_sp(self.sp + 1);

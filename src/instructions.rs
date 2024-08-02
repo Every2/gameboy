@@ -892,27 +892,59 @@ fn push_hl(cpu: &mut Cpu) {
 }
 
 fn jp_nn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut value = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    value |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8;
+    cpu.load_pc(value);
 }
 
 fn jp_hl(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.registers.hl());
 }
 
 fn jp_nz_nn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut value = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    value |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8;
+    
+    if !cpu.registers.f.zero {
+        cpu.load_pc(value);
+    }
 }
 
 fn jp_z_nn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut value = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    value |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8;
+
+    if cpu.registers.f.zero {
+        cpu.load_pc(value);
+    }
 }
 
 fn jp_nc_nn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut value = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    value |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8;
+
+    if !cpu.registers.f.carry {
+        cpu.load_pc(value);
+    }
 }
 
 fn jp_c_nn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut value = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    value |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8;
+    
+    if cpu.registers.f.carry {
+        cpu.load_pc(value);
+    }
 }
 
 fn jr_sn(cpu: &mut Cpu) {
