@@ -1376,39 +1376,44 @@ fn inc_l(cpu: &mut Cpu) {
 }
 
 fn inc_mhl(cpu: &mut Cpu) {
-    todo!()
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    let value = address + 1;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.zero = value == 0;
+    cpu.registers.f.half_carry = address & 0xf == 0xf;
+    cpu.external.ram.store_byte(cpu.registers.hl(), value);
 }
 
 fn inc_bc(cpu: &mut Cpu) {
-    todo!()
+    cpu.registers.set_bc(cpu.registers.bc() + 1);
 }
 
 fn inc_de(cpu: &mut Cpu) {
-    todo!()
+    cpu.registers.set_de(cpu.registers.de() + 1);
 }
 
 fn inc_hl(cpu: &mut Cpu) {
-    todo!()
+    cpu.registers.set_hl(cpu.registers.hl() + 1);
 }
 
 fn inc_sp(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_sp(cpu.sp + 1);
 }
 
 fn dec_bc(cpu: &mut Cpu) {
-    todo!()
+    cpu.registers.set_bc(cpu.registers.bc() - 1);
 }
 
 fn dec_de(cpu: &mut Cpu) {
-    todo!()
+    cpu.registers.set_de(cpu.registers.de() - 1);
 }
 
 fn dec_hl(cpu: &mut Cpu) {
-    todo!()
+    cpu.registers.set_hl(cpu.registers.hl() - 1);
 }
 
 fn dec_sp(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_sp(cpu.sp - 1);
 }
 
 fn sub_and_set_flags(cpu: &mut Cpu, x: u8, y: u8) -> u8 {
@@ -1476,11 +1481,14 @@ fn cp_a_l(cpu: &mut Cpu) {
 }
 
 fn cp_a_mhl(cpu: &mut Cpu) {
-    todo!()
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    sub_and_set_flags(cpu, cpu.registers.a, address);
 }
 
 fn cp_a_n(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let address = cpu.external.ram.read_byte(cpu.pc);
+    sub_and_set_flags(cpu, cpu.registers.a, address);
 }
 
 fn sub_a_a(cpu: &mut Cpu) {
@@ -1524,11 +1532,17 @@ fn sub_a_l(cpu: &mut Cpu) {
 }
 
 fn sub_a_mhl(cpu: &mut Cpu) {
-    todo!()
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    let value = sub_and_set_flags(cpu, cpu.registers.a, address);
+
+    cpu.registers.a = value;
 }
 
 fn sub_a_n(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let address = cpu.external.ram.read_byte(cpu.pc);
+    let value = sub_and_set_flags(cpu, cpu.registers.a, address);
+    cpu.registers.a = value;
 }
 
 fn sub_with_carry_and_set_flags(cpu: &mut Cpu, x: u8, y: u8) -> u8 {
@@ -1584,11 +1598,16 @@ fn sbc_a_l(cpu: &mut Cpu) {
 }
 
 fn sbc_a_mhl(cpu: &mut Cpu) {
-    todo!()
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    let value = sub_with_carry_and_set_flags(cpu, cpu.registers.a, address);
+    cpu.registers.a = value;
 }
 
 fn sbc_a_n(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let address = cpu.external.ram.read_byte(cpu.pc);
+    let value = sub_with_carry_and_set_flags(cpu, cpu.registers.a, address);
+    cpu.registers.a = value;
 }
 
 fn add_and_set_flags(cpu: &mut Cpu, x: u8, y: u8) -> u8 {
@@ -1643,11 +1662,16 @@ fn add_a_l(cpu: &mut Cpu) {
 }
 
 fn add_a_mhl(cpu: &mut Cpu) {
-    todo!()
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    let value = add_and_set_flags(cpu, cpu.registers.a, address);
+    cpu.registers.a = value;
 }
 
 fn add_a_n(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let address = cpu.external.ram.read_byte(cpu.pc);
+    let value = add_and_set_flags(cpu, cpu.registers.a, address);
+    cpu.registers.a = value;
 }
 
 fn add_with_carry_and_set_flags(cpu: &mut Cpu, x: u8, y: u8) -> u8 {
@@ -1703,15 +1727,28 @@ fn adc_a_l(cpu: &mut Cpu) {
 }
 
 fn adc_a_mhl(cpu: &mut Cpu) {
-    todo!()
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    let value = add_with_carry_and_set_flags(cpu, cpu.registers.a, address);
+    cpu.registers.a = value;
 }
 
 fn adc_a_n(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let address = cpu.external.ram.read_byte(cpu.pc);
+    let value = add_with_carry_and_set_flags(cpu, cpu.registers.a, address);
+    cpu.registers.a = value;
 }
 
 fn add_word_and_set_flags(cpu: &mut Cpu, x: u16, y: u16) -> u16 {
-    todo!()
+    let x = x as u32;
+    let y = y as u32;
+    let result = x + y;
+
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.carry = result & 0x1000 != 0;
+    cpu.registers.f.half_carry = (x ^ y ^ result) & 0x1000 != 0;
+
+    result as u16
 }
 
 fn add_hl_bc(cpu: &mut Cpu) {
@@ -1739,7 +1776,19 @@ fn add_hl_sp(cpu: &mut Cpu) {
 }
 
 fn add_sp_sn(cpu: &mut Cpu) {
-    todo!()
+    let sp = cpu.sp as i32;
+    cpu.set_pc(cpu.pc + 1);
+    let n = cpu.external.ram.read_byte(cpu.pc) as i8;
+    let nn = n as i32;
+
+    let result = sp + nn;
+
+    cpu.registers.f.carry = (sp ^ nn ^ result) & 0x100 != 0;
+    cpu.registers.f.half_carry = (sp ^ nn ^ result) & 0x100 != 0;
+    cpu.set_sp(result as u16);
+
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.zero = false;
 }
 
 fn and_a_a(cpu: &mut Cpu) {
@@ -1836,11 +1885,26 @@ fn and_a_l(cpu: &mut Cpu) {
 }
 
 fn and_a_mhl(cpu: &mut Cpu) {
-    todo!()
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    let result = cpu.registers.a & address;
+    cpu.registers.f.zero = result == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = true;
+    cpu.registers.f.carry = false;
+
+    cpu.registers.a = result;
 }
 
 fn and_a_n(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let address = cpu.external.ram.read_byte(cpu.pc);
+    let result = cpu.registers.a & address;
+    cpu.registers.f.zero = result == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = true;
+    cpu.registers.f.carry = false;
+
+    cpu.registers.a = result;
 }
 
 fn or_a_a(cpu: &mut Cpu) {
@@ -1923,11 +1987,26 @@ fn or_a_h(cpu: &mut Cpu) {
 }
 
 fn or_a_mhl(cpu: &mut Cpu) {
-    todo!()
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    let result = cpu.registers.a | address;
+    cpu.registers.f.zero = result == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+    cpu.registers.f.carry = false;
+
+    cpu.registers.a = result;
 }
 
 fn or_a_n(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let address = cpu.external.ram.read_byte(cpu.pc);
+    let result = cpu.registers.a | address;
+    cpu.registers.f.zero = result == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+    cpu.registers.f.carry = false;
+
+    cpu.registers.a = result;
 }
 
 fn xor(cpu: &mut Cpu, n: u8, m: u8) -> u8 {
@@ -1987,11 +2066,18 @@ fn xor_a_l(cpu: &mut Cpu) {
 }
 
 fn xor_a_mhl(cpu: &mut Cpu) {
-    todo!()
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    let result = xor(cpu, cpu.registers.a, address);
+
+    cpu.registers.a = result;
 }
 
 fn xor_a_n(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let address = cpu.external.ram.read_byte(cpu.pc);
+    let result = xor(cpu, cpu.registers.a, address);
+
+    cpu.registers.a = result;
 }
 
 fn or_a_l(cpu: &mut Cpu) {
@@ -2006,11 +2092,11 @@ fn or_a_l(cpu: &mut Cpu) {
 }
 
 fn di(cpu: &mut Cpu) {
-    todo!()
+    cpu.interrupts = false;
 }
 
 fn ei(cpu: &mut Cpu) {
-    todo!()
+    cpu.interrupts = true;
 }
 
 fn halt(cpu: &mut Cpu) {
