@@ -948,27 +948,69 @@ fn jp_c_nn(cpu: &mut Cpu) {
 }
 
 fn jr_sn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let offset = cpu.external.ram.read_byte(cpu.pc) as i8;
+    let mut pc = cpu.pc as i16;
+    pc += 1;
+    pc += offset as i16;
+
+    cpu.load_pc(pc as u16);
 }
 
 fn jr_nz_sn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let offset = cpu.external.ram.read_byte(cpu.pc) as i8;
+    if !cpu.registers.f.zero {
+        let mut pc = cpu.pc as i16;
+        pc += 1;
+        pc += offset as i16;
+
+        cpu.load_pc(pc as u16);
+    }
+    
 }
 
 fn jr_z_sn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let offset = cpu.external.ram.read_byte(cpu.pc) as i8;
+    if cpu.registers.f.zero {
+        let mut pc = cpu.pc as i16;
+        pc += 1;
+        pc += offset as i16;
+
+        cpu.load_pc(pc as u16);
+    }
+    
 }
 
 fn jr_nc_sn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let offset = cpu.external.ram.read_byte(cpu.pc) as i8;
+    if !cpu.registers.f.carry {
+        let mut pc = cpu.pc as i16;
+        pc += 1;
+        pc += offset as i16;
+
+        cpu.load_pc(pc as u16);
+    }
 }
 
 fn jr_c_sn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let offset = cpu.external.ram.read_byte(cpu.pc) as i8;
+    if cpu.registers.f.zero {
+        let mut pc = cpu.pc as i16;
+        pc += 1;
+        pc += offset as i16;
+
+        cpu.load_pc(pc as u16);
+    }
 }
 
 fn rst(cpu: &mut Cpu, addr: u16) {
-    todo!()
+    cpu.push_sp(cpu.pc);
+
+    cpu.load_pc(addr);
 }
 
 fn rst_00(cpu: &mut Cpu) {
@@ -1005,79 +1047,146 @@ fn rst_38(cpu: &mut Cpu) {
 }
 
 fn call_nn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut address = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    address |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8;
+    cpu.push_sp(cpu.pc + 1);
+
+    cpu.load_pc(address);
 }
 
 fn call_nz_nn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut address = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    address |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8;
+    if !cpu.registers.f.zero {
+        cpu.push_sp(cpu.pc + 1);
+
+        cpu.load_pc(address);
+    }
 }
 
+
 fn call_z_nn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut address = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    address |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8;
+    if cpu.registers.f.zero {
+        cpu.push_sp(cpu.pc + 1);
+
+        cpu.load_pc(address);
+    }
 }
 
 fn call_nc_nn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut address = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    address |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8;
+    if !cpu.registers.f.carry {
+        cpu.push_sp(cpu.pc + 1);
+
+        cpu.load_pc(address);
+    }
 }
 
 fn call_c_nn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let mut address = cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.set_pc(cpu.pc + 1);
+    address |= (cpu.external.ram.read_byte(cpu.pc) as u16) << 8;
+    if cpu.registers.f.carry {
+        cpu.push_sp(cpu.pc + 1);
+
+        cpu.load_pc(address);
+    }
 }
 
 fn ret(cpu: &mut Cpu) {
-    todo!()
+    let address = cpu.pop_sp();
+    cpu.set_pc(address);
 }
 
 fn reti(cpu: &mut Cpu) {
-    todo!()
+    let address = cpu.pop_sp();
+    cpu.set_pc(address);
+    cpu.interrupts = true;
 }
 
 fn ret_nz(cpu: &mut Cpu) {
-    todo!()
+    if !cpu.registers.f.zero {
+        let address = cpu.pop_sp();
+        cpu.set_pc(address);
+    }
 }
 
 fn ret_z(cpu: &mut Cpu) {
-    todo!()
+    if cpu.registers.f.zero {
+        let address = cpu.pop_sp();
+        cpu.set_pc(address);
+    }
 }
 
 fn ret_nc(cpu: &mut Cpu) {
-    todo!()
+    if !cpu.registers.f.carry {
+        let address = cpu.pop_sp();
+        cpu.set_pc(address);
+    }
 }
 
 fn ret_c(cpu: &mut Cpu) {
-    todo!()
+    if cpu.registers.f.carry {
+        let address = cpu.pop_sp();
+        cpu.set_pc(address);
+    }
 }
 
 fn ldd_mhl_a(cpu: &mut Cpu) {
-    todo!()
+    cpu.external.ram.store_byte(cpu.registers.hl(), cpu.registers.a);
+    cpu.registers.set_hl(cpu.registers.hl() - 1);
 }
 
 fn ldd_a_mhl(cpu: &mut Cpu) {
-    todo!()
+    cpu.registers.a = cpu.external.ram.read_byte(cpu.registers.hl());
+    cpu.registers.set_hl(cpu.registers.hl() - 1);
 }
 
 fn ldi_mhl_a(cpu: &mut Cpu) {
-    todo!()
+    cpu.external.ram.store_byte(cpu.registers.hl(), cpu.registers.a);
+    cpu.registers.set_hl(cpu.registers.hl() + 1);
 }
 
 fn ldi_a_mhl(cpu: &mut Cpu) {
-    todo!()
+    cpu.registers.a = cpu.external.ram.read_byte(cpu.registers.hl());
+    cpu.registers.set_hl(cpu.registers.hl() + 1);
 }
 
 fn ldh_mn_a(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let address = 0xff00 | cpu.external.ram.read_byte(cpu.pc) as u16;
+    cpu.external.ram.store_byte(address, cpu.registers.a);
 }
 
 fn ldh_mc_a(cpu: &mut Cpu) {
-    todo!()
+    cpu.external.ram.store_byte(0xff00 | (cpu.registers.c as u16), cpu.registers.a);
 }
 
 fn ldh_a_mn(cpu: &mut Cpu) {
-    todo!()
+    cpu.set_pc(cpu.pc + 1);
+    let address = 0xff00 | cpu.external.ram.read_byte(cpu.pc) as u16;
+    let value = cpu.external.ram.read_byte(address);
+
+    cpu.registers.a = value;
 }
 
 fn ldh_a_mc(cpu: &mut Cpu) {
-    todo!()
+    let address = 0xff00 | cpu.registers.c as u16;
+    let value = cpu.external.ram.read_byte(address);
+
+    cpu.registers.a = value;
 }
 
 fn dec_a(cpu: &mut Cpu) {
@@ -1172,7 +1281,14 @@ fn dec_l(cpu: &mut Cpu) {
 }
 
 fn dec_mhl(cpu: &mut Cpu) {
-    todo!()
+    let mut n = cpu.external.ram.read_byte(cpu.registers.hl());
+    cpu.registers.f.half_carry = n & 0xf == 0;
+    n -= 1;
+
+    cpu.external.ram.store_byte(cpu.registers.hl(), n);
+
+    cpu.registers.f.zero = n == 0;
+    cpu.registers.f.subtract = true;
 }
 
 fn inc_a(cpu: &mut Cpu) {

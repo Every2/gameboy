@@ -5,6 +5,7 @@ pub struct Cpu {
     pub registers: Registers,
     pub pc: u16,
     pub sp: u16,
+    pub interrupts: bool,
     pub external: Hardware,
 }
 
@@ -14,6 +15,7 @@ impl Cpu {
             registers: Registers::new(),
             pc: 0x0,
             sp: 0x00,
+            interrupts: true,
             external: Hardware::new(),
         }
     }
