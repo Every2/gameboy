@@ -1,4 +1,4 @@
-use crate::{cpu::Cpu, ram, registers::{self, FlagRegister}};
+use crate::cpu::Cpu;
 
 pub static OPCODES: [(fn(&mut Cpu), &str); 0x100] = [
     //Opcodes 0X
