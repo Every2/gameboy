@@ -1,4 +1,4 @@
-use crate::cpu::Cpu;
+use crate::{cpu::Cpu, registers};
 
 pub static OPCODES: [(fn (&mut Cpu), &str); 0x100] = [
     //OPCODES CB 0X
@@ -627,4 +627,828 @@ fn res_a_6(cpu: &mut Cpu) {
 
 fn res_a_7(cpu: &mut Cpu) {
     set_res(7, &mut cpu.registers.a);
+}
+
+fn res_b_0(cpu: &mut Cpu) {
+    set_res(0, &mut cpu.registers.b);
+}
+
+fn res_b_1(cpu: &mut Cpu) {
+    set_res(1, &mut cpu.registers.b);
+}
+
+fn res_b_2(cpu: &mut Cpu) {
+    set_res(2, &mut cpu.registers.b);
+}
+
+fn res_b_3(cpu: &mut Cpu) {
+    set_res(3, &mut cpu.registers.b);
+}
+
+fn res_b_4(cpu: &mut Cpu) {
+    set_res(4, &mut cpu.registers.b);
+}
+
+fn res_b_5(cpu: &mut Cpu) {
+    set_res(5, &mut cpu.registers.b);
+}
+
+fn res_b_6(cpu: &mut Cpu) {
+    set_res(6, &mut cpu.registers.b);
+}
+
+fn res_b_7(cpu: &mut Cpu) {
+    set_res(7, &mut cpu.registers.b);
+}
+
+fn res_c_0(cpu: &mut Cpu) {
+    set_res(0, &mut cpu.registers.c);
+}
+
+fn res_c_1(cpu: &mut Cpu) {
+    set_res(1, &mut cpu.registers.c);
+}
+
+fn res_c_2(cpu: &mut Cpu) {
+    set_res(2, &mut cpu.registers.c);
+}
+
+fn res_c_3(cpu: &mut Cpu) {
+    set_res(3, &mut cpu.registers.c);
+}
+
+fn res_c_4(cpu: &mut Cpu) {
+    set_res(4, &mut cpu.registers.c);
+}
+
+fn res_c_5(cpu: &mut Cpu) {
+    set_res(5, &mut cpu.registers.c);
+}
+
+fn res_c_6(cpu: &mut Cpu) {
+    set_res(6, &mut cpu.registers.c);
+}
+
+fn res_c_7(cpu: &mut Cpu) {
+    set_res(7, &mut cpu.registers.c);
+}
+
+fn res_d_0(cpu: &mut Cpu) {
+    set_res(0, &mut cpu.registers.d);
+}
+
+fn res_d_1(cpu: &mut Cpu) {
+    set_res(1, &mut cpu.registers.d);
+}
+
+fn res_d_2(cpu: &mut Cpu) {
+    set_res(2, &mut cpu.registers.d);
+}
+
+fn res_d_3(cpu: &mut Cpu) {
+    set_res(3, &mut cpu.registers.d);
+}
+
+fn res_d_4(cpu: &mut Cpu) {
+    set_res(4, &mut cpu.registers.d);
+}
+
+fn res_d_5(cpu: &mut Cpu) {
+    set_res(5, &mut cpu.registers.d);
+}
+
+fn res_d_6(cpu: &mut Cpu) {
+    set_res(6, &mut cpu.registers.d);
+}
+
+fn res_d_7(cpu: &mut Cpu) {
+    set_res(7, &mut cpu.registers.d);
+}
+
+fn res_e_0(cpu: &mut Cpu) {
+    set_res(0, &mut cpu.registers.e);
+}
+
+fn res_e_1(cpu: &mut Cpu) {
+    set_res(1, &mut cpu.registers.e);
+}
+
+fn res_e_2(cpu: &mut Cpu) {
+    set_res(2, &mut cpu.registers.e);
+}
+
+fn res_e_3(cpu: &mut Cpu) {
+    set_res(3, &mut cpu.registers.e);
+}
+
+fn res_e_4(cpu: &mut Cpu) {
+    set_res(4, &mut cpu.registers.e);
+}
+
+fn res_e_5(cpu: &mut Cpu) {
+    set_res(5, &mut cpu.registers.e);
+}
+
+fn res_e_6(cpu: &mut Cpu) {
+    set_res(6, &mut cpu.registers.e);
+}
+
+fn res_e_7(cpu: &mut Cpu) {
+    set_res(7, &mut cpu.registers.e);
+}
+
+fn res_h_0(cpu: &mut Cpu) {
+    set_res(0, &mut cpu.registers.h);
+}
+
+fn res_h_1(cpu: &mut Cpu) {
+    set_res(1, &mut cpu.registers.h);
+}
+
+fn res_h_2(cpu: &mut Cpu) {
+    set_res(2, &mut cpu.registers.h);
+}
+
+fn res_h_3(cpu: &mut Cpu) {
+    set_res(3, &mut cpu.registers.h);
+}
+
+fn res_h_4(cpu: &mut Cpu) {
+    set_res(4, &mut cpu.registers.h);
+}
+
+fn res_h_5(cpu: &mut Cpu) {
+    set_res(5, &mut cpu.registers.h);
+}
+
+fn res_h_6(cpu: &mut Cpu) {
+    set_res(6, &mut cpu.registers.h);
+}
+
+fn res_h_7(cpu: &mut Cpu) {
+    set_res(7, &mut cpu.registers.h);
+}
+
+fn res_l_0(cpu: &mut Cpu) {
+    set_res(0, &mut cpu.registers.l);
+}
+
+fn res_l_1(cpu: &mut Cpu) {
+    set_res(1, &mut cpu.registers.l);
+}
+
+fn res_l_2(cpu: &mut Cpu) {
+    set_res(2, &mut cpu.registers.l);
+}
+
+fn res_l_3(cpu: &mut Cpu) {
+    set_res(3, &mut cpu.registers.l);
+}
+
+fn res_l_4(cpu: &mut Cpu) {
+    set_res(4, &mut cpu.registers.l);
+}
+
+fn res_l_5(cpu: &mut Cpu) {
+    set_res(5, &mut cpu.registers.l);
+}
+
+fn res_l_6(cpu: &mut Cpu) {
+    set_res(6, &mut cpu.registers.l);
+}
+
+fn res_l_7(cpu: &mut Cpu) {
+    set_res(7, &mut cpu.registers.l);
+}
+
+fn set_mres(cpu: &mut Cpu, bit: u8) {
+    let register = cpu.external.ram.read_byte(cpu.registers.hl());
+    let res = register & !(1u8 << (bit as usize));
+    cpu.external.ram.store_byte(cpu.registers.hl(),res);
+}
+
+fn res_mhl_0(cpu: &mut Cpu) {
+    set_mres(cpu, 0);
+}
+
+fn res_mhl_1(cpu: &mut Cpu) {
+    set_mres(cpu, 1);
+}
+
+fn res_mhl_2(cpu: &mut Cpu) {
+    set_mres(cpu, 2);
+}
+
+fn res_mhl_3(cpu: &mut Cpu) {
+    set_mres(cpu, 3);
+}
+
+fn res_mhl_4(cpu: &mut Cpu) {
+    set_mres(cpu, 4);
+}
+
+fn res_mhl_5(cpu: &mut Cpu) {
+    set_mres(cpu, 5);
+}
+
+fn res_mhl_6(cpu: &mut Cpu) {
+    set_mres(cpu, 6);
+}
+
+fn res_mhl_7(cpu: &mut Cpu) {
+    set_mres(cpu, 7);
+}
+
+//Set a bit in a register
+fn set(register: &mut u8, bit: u8) {
+    let result = *register | (1u8 << (bit as usize));
+    *register = result;
+}
+
+fn set_a_0(cpu: &mut Cpu) {
+    set(&mut cpu.registers.a, 0);
+}
+
+fn set_a_1(cpu: &mut Cpu) {
+    set(&mut cpu.registers.a, 1);
+}
+
+fn set_a_2(cpu: &mut Cpu) {
+    set(&mut cpu.registers.a, 2);
+}
+
+fn set_a_3(cpu: &mut Cpu) {
+    set(&mut cpu.registers.a, 3);
+}
+
+fn set_a_4(cpu: &mut Cpu) {
+    set(&mut cpu.registers.a, 4);
+}
+
+fn set_a_5(cpu: &mut Cpu) {
+    set(&mut cpu.registers.a, 5);
+}
+
+fn set_a_6(cpu: &mut Cpu) {
+    set(&mut cpu.registers.a, 6);
+}
+
+fn set_a_7(cpu: &mut Cpu) {
+    set(&mut cpu.registers.a, 7);
+}
+
+fn set_b_0(cpu: &mut Cpu) {
+    set(&mut cpu.registers.b, 0);
+}
+
+fn set_b_1(cpu: &mut Cpu) {
+    set(&mut cpu.registers.b, 1);
+}
+
+fn set_b_2(cpu: &mut Cpu) {
+    set(&mut cpu.registers.b, 2);
+}
+
+fn set_b_3(cpu: &mut Cpu) {
+    set(&mut cpu.registers.b, 3);
+}
+
+fn set_b_4(cpu: &mut Cpu) {
+    set(&mut cpu.registers.b, 4);
+}
+
+fn set_b_5(cpu: &mut Cpu) {
+    set(&mut cpu.registers.b, 5);
+}
+
+fn set_b_6(cpu: &mut Cpu) {
+    set(&mut cpu.registers.b, 6);
+}
+
+fn set_b_7(cpu: &mut Cpu) {
+    set(&mut cpu.registers.b, 7);
+}
+
+fn set_c_0(cpu: &mut Cpu) {
+    set(&mut cpu.registers.c, 0);
+}
+
+fn set_c_1(cpu: &mut Cpu) {
+    set(&mut cpu.registers.c, 1);
+}
+
+fn set_c_2(cpu: &mut Cpu) {
+    set(&mut cpu.registers.c, 2);
+}
+
+fn set_c_3(cpu: &mut Cpu) {
+    set(&mut cpu.registers.c, 3);
+}
+
+fn set_c_4(cpu: &mut Cpu) {
+    set(&mut cpu.registers.c, 4);
+}
+
+fn set_c_5(cpu: &mut Cpu) {
+    set(&mut cpu.registers.c, 5);
+}
+
+fn set_c_6(cpu: &mut Cpu) {
+    set(&mut cpu.registers.c, 6);
+}
+
+fn set_c_7(cpu: &mut Cpu) {
+    set(&mut cpu.registers.c, 7);
+}
+
+fn set_d_0(cpu: &mut Cpu) {
+    set(&mut cpu.registers.d, 0);
+}
+
+fn set_d_1(cpu: &mut Cpu) {
+    set(&mut cpu.registers.d, 1);
+}
+
+fn set_d_2(cpu: &mut Cpu) {
+    set(&mut cpu.registers.d, 2);
+}
+
+fn set_d_3(cpu: &mut Cpu) {
+    set(&mut cpu.registers.d, 3);
+}
+
+fn set_d_4(cpu: &mut Cpu) {
+    set(&mut cpu.registers.d, 4);
+}
+
+fn set_d_5(cpu: &mut Cpu) {
+    set(&mut cpu.registers.d, 5);
+}
+
+fn set_d_6(cpu: &mut Cpu) {
+    set(&mut cpu.registers.d, 6);
+}
+
+fn set_d_7(cpu: &mut Cpu) {
+    set(&mut cpu.registers.d, 7);
+}
+
+fn set_e_0(cpu: &mut Cpu) {
+    set(&mut cpu.registers.e, 0);
+}
+
+fn set_e_1(cpu: &mut Cpu) {
+    set(&mut cpu.registers.e, 1);
+}
+
+fn set_e_2(cpu: &mut Cpu) {
+    set(&mut cpu.registers.e, 2);
+}
+
+fn set_e_3(cpu: &mut Cpu) {
+    set(&mut cpu.registers.e, 3);
+}
+
+fn set_e_4(cpu: &mut Cpu) {
+    set(&mut cpu.registers.e, 4);
+}
+
+fn set_e_5(cpu: &mut Cpu) {
+    set(&mut cpu.registers.e, 5);
+}
+
+fn set_e_6(cpu: &mut Cpu) {
+    set(&mut cpu.registers.e, 6);
+}
+
+fn set_e_7(cpu: &mut Cpu) {
+    set(&mut cpu.registers.e, 7);
+}
+
+fn set_h_0(cpu: &mut Cpu) {
+    set(&mut cpu.registers.h, 0);
+}
+
+fn set_h_1(cpu: &mut Cpu) {
+    set(&mut cpu.registers.h, 1);
+}
+
+fn set_h_2(cpu: &mut Cpu) {
+    set(&mut cpu.registers.h, 2);
+}
+
+fn set_h_3(cpu: &mut Cpu) {
+    set(&mut cpu.registers.h, 3);
+}
+
+fn set_h_4(cpu: &mut Cpu) {
+    set(&mut cpu.registers.h, 4);
+}
+
+fn set_h_5(cpu: &mut Cpu) {
+    set(&mut cpu.registers.h, 5);
+}
+
+fn set_h_6(cpu: &mut Cpu) {
+    set(&mut cpu.registers.h, 6);
+}
+
+fn set_h_7(cpu: &mut Cpu) {
+    set(&mut cpu.registers.h, 7);
+}
+
+fn set_l_0(cpu: &mut Cpu) {
+    set(&mut cpu.registers.l, 0);
+}
+
+fn set_l_1(cpu: &mut Cpu) {
+    set_mhl(cpu, 0);
+}
+
+fn set_l_2(cpu: &mut Cpu) {
+    set(&mut cpu.registers.l, 2);
+}
+
+fn set_l_3(cpu: &mut Cpu) {
+    set(&mut cpu.registers.l, 3);
+}
+
+fn set_l_4(cpu: &mut Cpu) {
+    set(&mut cpu.registers.l, 4);
+}
+
+fn set_l_5(cpu: &mut Cpu) {
+    set(&mut cpu.registers.l, 5);
+}
+
+fn set_l_6(cpu: &mut Cpu) {
+    set(&mut cpu.registers.l, 6);
+}
+
+fn set_l_7(cpu: &mut Cpu) {
+    set(&mut cpu.registers.l, 7);
+}
+
+fn set_mhl(cpu: &mut Cpu, bit: u8) {
+    let register = cpu.external.ram.read_byte(cpu.registers.hl());
+    let result = register | (1u8 << (bit as usize));
+    cpu.external.ram.store_byte(cpu.registers.hl(), result);
+}
+
+fn set_mhl_0(cpu: &mut Cpu) {
+    set_mhl(cpu, 0);
+}
+
+fn set_mhl_1(cpu: &mut Cpu) {
+    set_mhl(cpu, 1);
+}
+
+fn set_mhl_2(cpu: &mut Cpu) {
+    set_mhl(cpu, 2);
+}
+
+fn set_mhl_3(cpu: &mut Cpu) {
+    set_mhl(cpu, 3);
+}
+
+fn set_mhl_4(cpu: &mut Cpu) {
+    set_mhl(cpu, 4);
+}
+
+fn set_mhl_5(cpu: &mut Cpu) {
+    set_mhl(cpu, 5);
+}
+
+fn set_mhl_6(cpu: &mut Cpu) {
+    set_mhl(cpu, 6);
+}
+
+fn set_mhl_7(cpu: &mut Cpu) {
+    set_mhl(cpu, 7);
+}
+
+fn srl(cpu: &mut Cpu, value: u8) -> u8 {
+    cpu.registers.f.carry = value & 1 != 0;
+
+    let result = value >> 1;
+
+    cpu.registers.f.zero = result == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+
+    result
+}
+
+fn srl_a(cpu: &mut Cpu) {
+    cpu.registers.a = srl(cpu, cpu.registers.a);
+}
+
+fn srl_b(cpu: &mut Cpu) {
+    cpu.registers.b = srl(cpu, cpu.registers.b);
+}
+
+fn srl_c(cpu: &mut Cpu) {
+    cpu.registers.c = srl(cpu, cpu.registers.c);
+}
+
+fn srl_d(cpu: &mut Cpu) {
+    cpu.registers.d = srl(cpu, cpu.registers.d);
+}
+
+fn srl_e(cpu: &mut Cpu) {
+    cpu.registers.e = srl(cpu, cpu.registers.e);
+}
+
+fn srl_h(cpu: &mut Cpu) {
+    cpu.registers.h = srl(cpu, cpu.registers.h);
+}
+
+fn srl_l(cpu: &mut Cpu) {
+    cpu.registers.l = srl(cpu, cpu.registers.l);
+}
+
+fn srl_mhl(cpu: &mut Cpu) {
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    let result = srl(cpu, address);
+    cpu.external.ram.store_byte(cpu.registers.hl(), result);
+}
+
+fn sla(cpu: &mut Cpu, value: u8) -> u8 {
+    cpu.registers.f.carry = value & 0x80 != 0;
+
+    let result = value << 1;
+
+    cpu.registers.f.zero = result == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+
+    result
+}
+
+fn sla_a(cpu: &mut Cpu) {
+    cpu.registers.a = sla(cpu, cpu.registers.a);
+}
+
+fn sla_b(cpu: &mut Cpu) {
+    cpu.registers.b = sla(cpu, cpu.registers.b);
+}
+
+fn sla_c(cpu: &mut Cpu) {
+    cpu.registers.c = sla(cpu, cpu.registers.c);
+}
+
+fn sla_d(cpu: &mut Cpu) {
+    cpu.registers.d = sla(cpu, cpu.registers.d);
+}
+
+fn sla_e(cpu: &mut Cpu) {
+    cpu.registers.e = sla(cpu, cpu.registers.e);
+}
+
+fn sla_h(cpu: &mut Cpu) {
+    cpu.registers.h = sla(cpu, cpu.registers.h);
+}
+
+fn sla_l(cpu: &mut Cpu) {
+    cpu.registers.l = sla(cpu, cpu.registers.l);
+}
+
+fn sla_mhl(cpu: &mut Cpu) {
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    let result = sla(cpu, address);
+    cpu.external.ram.store_byte(cpu.registers.hl(), result);
+}
+
+fn sra(cpu: &mut Cpu, value: u8) -> u8{
+    cpu.registers.f.carry = value & 1 != 0;
+
+    let result = (value >> 1) | (value & 0x80);
+
+    cpu.registers.f.zero = result == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+
+    result
+}
+
+fn sra_a(cpu: &mut Cpu) {
+    cpu.registers.a = sra(cpu, cpu.registers.a);
+}
+
+fn sra_b(cpu: &mut Cpu) {
+    cpu.registers.b = sra(cpu, cpu.registers.b);
+}
+
+fn sra_c(cpu: &mut Cpu) {
+    cpu.registers.c = sra(cpu, cpu.registers.c);
+}
+
+fn sra_d(cpu: &mut Cpu) {
+    cpu.registers.d = sra(cpu, cpu.registers.d);
+}
+
+fn sra_e(cpu: &mut Cpu) {
+    cpu.registers.e = sra(cpu, cpu.registers.e);
+}
+
+fn sra_h(cpu: &mut Cpu) {
+    cpu.registers.h = sra(cpu, cpu.registers.h);
+}
+
+fn sra_l(cpu: &mut Cpu) {
+    cpu.registers.l = sra(cpu, cpu.registers.l);
+}
+
+fn sra_mhl(cpu: &mut Cpu) {
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    let result = sra(cpu, address);
+    cpu.external.ram.store_byte(cpu.registers.hl(), result);
+}
+
+fn rlc(cpu: &mut Cpu, value: u8) -> u8{
+    cpu.registers.f.carry = value & 0x80 != 0;
+
+    let result = (value << 1) | (value >> 7);
+
+    cpu.registers.f.zero = result == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+
+    result
+}
+
+fn rlc_a(cpu: &mut Cpu) {
+    cpu.registers.a = rlc(cpu, cpu.registers.a);
+}
+
+fn rlc_b(cpu: &mut Cpu) {
+    cpu.registers.b = rlc(cpu, cpu.registers.b);
+}
+
+fn rlc_c(cpu: &mut Cpu) {
+    cpu.registers.c = rlc(cpu, cpu.registers.c);
+}
+
+fn rlc_d(cpu: &mut Cpu) {
+    cpu.registers.d = rlc(cpu, cpu.registers.d);
+}
+
+fn rlc_e(cpu: &mut Cpu) {
+    cpu.registers.e = rlc(cpu, cpu.registers.e);
+}
+
+fn rlc_h(cpu: &mut Cpu) {
+    cpu.registers.h = rlc(cpu, cpu.registers.h);
+}
+
+fn rlc_l(cpu: &mut Cpu) {
+    cpu.registers.l = rlc(cpu, cpu.registers.l);
+}
+
+fn rlc_mhl(cpu: &mut Cpu) {
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    let result = rlc(cpu, address);
+    cpu.external.ram.store_byte(cpu.registers.hl(), result);
+}
+
+fn rrc(cpu: &mut Cpu, value: u8) -> u8{
+    cpu.registers.f.carry = value & 1 != 0;
+
+    let result = (value >> 1) | (value << 7);
+
+    cpu.registers.f.zero = result == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+
+    result
+}
+
+fn rrc_a(cpu: &mut Cpu) {
+    cpu.registers.a = rrc(cpu, cpu.registers.a);
+}
+
+fn rrc_b(cpu: &mut Cpu) {
+    cpu.registers.b = rrc(cpu, cpu.registers.b);
+}
+
+fn rrc_c(cpu: &mut Cpu) {
+    cpu.registers.c = rrc(cpu, cpu.registers.c);
+}
+
+fn rrc_d(cpu: &mut Cpu) {
+    cpu.registers.d = rrc(cpu, cpu.registers.d);
+}
+
+fn rrc_e(cpu: &mut Cpu) {
+    cpu.registers.e = rrc(cpu, cpu.registers.e);
+}
+
+fn rrc_h(cpu: &mut Cpu) {
+    cpu.registers.h = rrc(cpu, cpu.registers.h);
+}
+
+fn rrc_l(cpu: &mut Cpu) {
+    cpu.registers.l = rrc(cpu, cpu.registers.l);
+}
+
+fn rrc_mhl(cpu: &mut Cpu) {
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    let result = rrc(cpu, address);
+    cpu.external.ram.store_byte(cpu.registers.hl(), result);
+}
+
+fn rl(cpu: &mut Cpu, value: u8) -> u8{
+    let old_carry = cpu.registers.f.carry as u8;
+
+    cpu.registers.f.carry = value & 0x80 != 0;
+
+    let result = (value << 1) | old_carry;
+
+    cpu.registers.f.zero = result == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+
+    result
+}
+
+fn rl_a(cpu: &mut Cpu) {
+    cpu.registers.a = rl(cpu, cpu.registers.a);
+}
+
+fn rl_b(cpu: &mut Cpu) {
+    cpu.registers.b = rl(cpu, cpu.registers.b);
+}
+
+fn rl_c(cpu: &mut Cpu) {
+    cpu.registers.c = rl(cpu, cpu.registers.c);
+}
+
+fn rl_d(cpu: &mut Cpu) {
+    cpu.registers.d = rl(cpu, cpu.registers.d);
+}
+
+fn rl_e(cpu: &mut Cpu) {
+    cpu.registers.e = rl(cpu, cpu.registers.e);
+}
+
+fn rl_h(cpu: &mut Cpu) {
+    cpu.registers.h = rl(cpu, cpu.registers.h);
+}
+
+fn rl_l(cpu: &mut Cpu) {
+    cpu.registers.l = rl(cpu, cpu.registers.l);
+}
+
+fn rl_mhl(cpu: &mut Cpu) {
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    let result = rl(cpu, address);
+    cpu.external.ram.store_byte(cpu.registers.hl(), result);
+}
+
+fn rr(cpu: &mut Cpu, value: u8) -> u8{
+    let old_carry = cpu.registers.f.carry as u8;
+
+    cpu.registers.f.carry = value & 0x1 != 0;
+
+    let result = (value >> 1) | (old_carry << 7);
+
+    cpu.registers.f.zero = result == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+
+    result
+}
+
+fn rr_a(cpu: &mut Cpu) {
+    cpu.registers.a = rr(cpu, cpu.registers.a);
+}
+
+fn rr_b(cpu: &mut Cpu) {
+    cpu.registers.b = rr(cpu, cpu.registers.b);
+}
+
+fn rr_c(cpu: &mut Cpu) {
+    cpu.registers.c = rr(cpu, cpu.registers.c);
+}
+
+fn rr_d(cpu: &mut Cpu) {
+    cpu.registers.d = rr(cpu, cpu.registers.d);
+}
+
+fn rr_e(cpu: &mut Cpu) {
+    cpu.registers.e = rr(cpu, cpu.registers.e);
+}
+
+fn rr_h(cpu: &mut Cpu) {
+    cpu.registers.h = rr(cpu, cpu.registers.h);
+}
+
+fn rr_l(cpu: &mut Cpu) {
+    cpu.registers.l = rr(cpu, cpu.registers.l);
+}
+
+fn rr_mhl(cpu: &mut Cpu) {
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    let result = rr(cpu, address);
+    cpu.external.ram.store_byte(cpu.registers.hl(), result);
 }
