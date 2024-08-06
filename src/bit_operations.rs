@@ -318,15 +318,10 @@ fn swap_mhl(cpu: &mut Cpu) {
     cpu.external.ram.store_byte(cpu.registers.hl(), rsult);
 }
 
-//Test a bit in u8. Return true if bit is 0
-fn bit_is_zero(value: u8, bit: u8) -> bool {
-    (value & (1u8 << (bit as usize))) == 0
-}
-
 
 //Function to test bits in a generic register a until l
 fn set_bit(cpu: &mut Cpu, bit: u8, register: u8) {
-    cpu.registers.f.zero = bit_is_zero(register, bit);
+    cpu.registers.f.zero = (register & (1u8 << (bit as usize))) == 0;
     cpu.registers.f.subtract = false;
     cpu.registers.f.half_carry = true;
 }
@@ -559,7 +554,7 @@ fn bit_l_7(cpu: &mut Cpu) {
 //Function to test bits in [HL]
 fn set_mbit(cpu: &mut Cpu, bit: u8) {
     let result = cpu.external.ram.read_byte(cpu.registers.hl());
-    cpu.registers.f.zero = bit_is_zero(result, bit);
+    cpu.registers.f.zero = (result & (1u8 << (bit as usize))) == 0;
     cpu.registers.f.subtract = false;
     cpu.registers.f.half_carry = true;
 }
@@ -596,13 +591,9 @@ fn bit_mhl_7(cpu: &mut Cpu) {
     set_mbit(cpu, 7);
 }
 
-//Function to clear one bit in a u8
-fn res(value: &u8, bit: u8) -> u8 {
-    value & !(1u8 << (bit as usize))
-}
-
+//Function to clear one bit in a u8 and set
 fn set_res(bit: u8, register: &mut u8) {
-    let res = res(register, bit);
+    let res = *register & !(1u8 << (bit as usize));
     *register = res;
 }
 
