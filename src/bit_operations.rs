@@ -1,4 +1,4 @@
-use crate::cpu;
+use crate::cpu::Cpu;
 
 pub static OPCODES: [(fn (&mut Cpu), &str); 0x100] = [
     //OPCODES CB 0X
@@ -274,3 +274,366 @@ pub static OPCODES: [(fn (&mut Cpu), &str); 0x100] = [
     (set_mhl_7, "SET [HL], 7"),
     (set_a_7, "SET A, 7"),
 ];
+
+fn swap(cpu: &mut Cpu, value: u8) -> u8 {
+    cpu.registers.f.zero = value == 0;
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = false;
+    cpu.registers.f.carry = false;
+
+    (value << 4) | (value >> 4)
+}
+
+fn swap_a(cpu: &mut Cpu) {
+    cpu.registers.a = swap(cpu, cpu.registers.a);
+}
+
+fn swap_b(cpu: &mut Cpu) {
+    cpu.registers.b = swap(cpu, cpu.registers.b);
+}
+
+fn swap_c(cpu: &mut Cpu) {
+    cpu.registers.c = swap(cpu, cpu.registers.c);
+}
+
+fn swap_d(cpu: &mut Cpu) {
+    cpu.registers.d = swap(cpu, cpu.registers.d);
+}
+
+fn swap_e(cpu: &mut Cpu) {
+    cpu.registers.e = swap(cpu, cpu.registers.e);
+}
+
+fn swap_h(cpu: &mut Cpu) {
+    cpu.registers.h = swap(cpu, cpu.registers.h);
+}
+
+fn swap_l(cpu: &mut Cpu) {
+    cpu.registers.l = swap(cpu, cpu.registers.l);
+}
+
+fn swap_mhl(cpu: &mut Cpu) {
+    let address = cpu.external.ram.read_byte(cpu.registers.hl());
+    let rsult = swap(cpu, address);
+    cpu.external.ram.store_byte(cpu.registers.hl(), rsult);
+}
+
+//Test a bit in u8. Return true if bit is 0
+fn bit_is_zero(value: u8, bit: u8) -> bool {
+    (value & (1u8 << (bit as usize))) == 0
+}
+
+
+//Function to test bits in a generic register a until l
+fn set_bit(cpu: &mut Cpu, bit: u8, register: u8) {
+    cpu.registers.f.zero = bit_is_zero(register, bit);
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = true;
+}
+
+fn bit_a_0(cpu: &mut Cpu) {
+    set_bit(cpu, 0, cpu.registers.a);
+}
+
+fn bit_a_1(cpu: &mut Cpu) {
+    set_bit(cpu, 1, cpu.registers.a);
+}
+
+fn bit_a_2(cpu: &mut Cpu) {
+    set_bit(cpu, 2, cpu.registers.a);
+}
+
+fn bit_a_3(cpu: &mut Cpu) {
+    set_bit(cpu, 3, cpu.registers.a);
+}
+
+fn bit_a_4(cpu: &mut Cpu) {
+    set_bit(cpu, 4, cpu.registers.a);
+}
+
+fn bit_a_5(cpu: &mut Cpu) {
+    set_bit(cpu, 5, cpu.registers.a);
+}
+
+fn bit_a_6(cpu: &mut Cpu) {
+    set_bit(cpu, 6, cpu.registers.a);
+}
+
+fn bit_a_7(cpu: &mut Cpu) {
+    set_bit(cpu, 7, cpu.registers.a);
+}
+
+
+fn bit_b_0(cpu: &mut Cpu) {
+    set_bit(cpu, 0, cpu.registers.b);
+}
+
+fn bit_b_1(cpu: &mut Cpu) {
+    set_bit(cpu, 1, cpu.registers.b);
+}
+
+fn bit_b_2(cpu: &mut Cpu) {
+    set_bit(cpu, 2, cpu.registers.b);
+}
+
+fn bit_b_3(cpu: &mut Cpu) {
+    set_bit(cpu, 3, cpu.registers.b);
+}
+
+fn bit_b_4(cpu: &mut Cpu) {
+    set_bit(cpu, 4, cpu.registers.b);
+}
+
+fn bit_b_5(cpu: &mut Cpu) {
+    set_bit(cpu, 5, cpu.registers.b);
+}
+
+fn bit_b_6(cpu: &mut Cpu) {
+    set_bit(cpu, 6, cpu.registers.b);
+}
+
+fn bit_b_7(cpu: &mut Cpu) {
+    set_bit(cpu, 7, cpu.registers.b);
+}
+
+fn bit_c_0(cpu: &mut Cpu) {
+    set_bit(cpu, 0, cpu.registers.c);
+}
+
+fn bit_c_1(cpu: &mut Cpu) {
+    set_bit(cpu, 1, cpu.registers.c);
+}
+
+fn bit_c_2(cpu: &mut Cpu) {
+    set_bit(cpu, 2, cpu.registers.c);
+}
+
+fn bit_c_3(cpu: &mut Cpu) {
+    set_bit(cpu, 3, cpu.registers.c);
+}
+
+fn bit_c_4(cpu: &mut Cpu) {
+    set_bit(cpu, 4, cpu.registers.c);
+}
+
+fn bit_c_5(cpu: &mut Cpu) {
+    set_bit(cpu, 5, cpu.registers.c);
+}
+
+fn bit_c_6(cpu: &mut Cpu) {
+    set_bit(cpu, 6, cpu.registers.c);
+}
+
+fn bit_c_7(cpu: &mut Cpu) {
+    set_bit(cpu, 7, cpu.registers.c);
+}
+
+fn bit_d_0(cpu: &mut Cpu) {
+    set_bit(cpu, 0, cpu.registers.d);
+}
+
+fn bit_d_1(cpu: &mut Cpu) {
+    set_bit(cpu, 1, cpu.registers.d);
+}
+
+fn bit_d_2(cpu: &mut Cpu) {
+    set_bit(cpu, 2, cpu.registers.d);
+}
+
+fn bit_d_3(cpu: &mut Cpu) {
+    set_bit(cpu, 3, cpu.registers.d);
+}
+
+fn bit_d_4(cpu: &mut Cpu) {
+    set_bit(cpu, 4, cpu.registers.d);
+}
+
+fn bit_d_5(cpu: &mut Cpu) {
+    set_bit(cpu, 5, cpu.registers.d);
+}
+
+fn bit_d_6(cpu: &mut Cpu) {
+    set_bit(cpu, 6, cpu.registers.d);
+}
+
+fn bit_d_7(cpu: &mut Cpu) {
+    set_bit(cpu, 7, cpu.registers.d);
+}
+
+fn bit_e_0(cpu: &mut Cpu) {
+    set_bit(cpu, 0, cpu.registers.e);
+}
+
+fn bit_e_1(cpu: &mut Cpu) {
+    set_bit(cpu, 1, cpu.registers.e);
+}
+
+fn bit_e_2(cpu: &mut Cpu) {
+    set_bit(cpu, 2, cpu.registers.e);
+}
+
+fn bit_e_3(cpu: &mut Cpu) {
+    set_bit(cpu, 3, cpu.registers.e);
+}
+
+fn bit_e_4(cpu: &mut Cpu) {
+    set_bit(cpu, 4, cpu.registers.e);
+}
+
+fn bit_e_5(cpu: &mut Cpu) {
+    set_bit(cpu, 5, cpu.registers.e);
+}
+
+fn bit_e_6(cpu: &mut Cpu) {
+    set_bit(cpu, 6, cpu.registers.e);
+}
+
+fn bit_e_7(cpu: &mut Cpu) {
+    set_bit(cpu, 7, cpu.registers.e);
+}
+
+fn bit_h_0(cpu: &mut Cpu) {
+    set_bit(cpu, 0, cpu.registers.h);
+}
+
+fn bit_h_1(cpu: &mut Cpu) {
+    set_bit(cpu, 1, cpu.registers.h);
+}
+
+fn bit_h_2(cpu: &mut Cpu) {
+    set_bit(cpu, 2, cpu.registers.h);
+}
+
+fn bit_h_3(cpu: &mut Cpu) {
+    set_bit(cpu, 3, cpu.registers.h);
+}
+
+fn bit_h_4(cpu: &mut Cpu) {
+    set_bit(cpu, 4, cpu.registers.h);
+}
+
+fn bit_h_5(cpu: &mut Cpu) {
+    set_bit(cpu, 5, cpu.registers.h);
+}
+
+fn bit_h_6(cpu: &mut Cpu) {
+    set_bit(cpu, 6, cpu.registers.h);
+}
+
+fn bit_h_7(cpu: &mut Cpu) {
+    set_bit(cpu, 7, cpu.registers.h);
+}
+
+fn bit_l_0(cpu: &mut Cpu) {
+    set_bit(cpu, 0, cpu.registers.l);
+}
+
+fn bit_l_1(cpu: &mut Cpu) {
+    set_bit(cpu, 1, cpu.registers.l);
+}
+
+fn bit_l_2(cpu: &mut Cpu) {
+    set_bit(cpu, 2, cpu.registers.l);
+}
+
+fn bit_l_3(cpu: &mut Cpu) {
+    set_bit(cpu, 3, cpu.registers.l);
+}
+
+fn bit_l_4(cpu: &mut Cpu) {
+    set_bit(cpu, 4, cpu.registers.l);
+}
+
+fn bit_l_5(cpu: &mut Cpu) {
+    set_bit(cpu, 5, cpu.registers.l);
+}
+
+fn bit_l_6(cpu: &mut Cpu) {
+    set_bit(cpu, 6, cpu.registers.l);
+}
+
+fn bit_l_7(cpu: &mut Cpu) {
+    set_bit(cpu, 7, cpu.registers.l);
+}
+
+//Function to test bits in [HL]
+fn set_mbit(cpu: &mut Cpu, bit: u8) {
+    let result = cpu.external.ram.read_byte(cpu.registers.hl());
+    cpu.registers.f.zero = bit_is_zero(result, bit);
+    cpu.registers.f.subtract = false;
+    cpu.registers.f.half_carry = true;
+}
+
+fn bit_mhl_0(cpu: &mut Cpu) {
+    set_mbit(cpu, 0);
+}
+
+fn bit_mhl_1(cpu: &mut Cpu) {
+    set_mbit(cpu, 1);
+}
+
+fn bit_mhl_2(cpu: &mut Cpu) {
+    set_mbit(cpu, 2);
+}
+
+fn bit_mhl_3(cpu: &mut Cpu) {
+    set_mbit(cpu, 3);
+}
+
+fn bit_mhl_4(cpu: &mut Cpu) {
+    set_mbit(cpu, 4);
+}
+
+fn bit_mhl_5(cpu: &mut Cpu) {
+    set_mbit(cpu, 5);
+}
+
+fn bit_mhl_6(cpu: &mut Cpu) {
+    set_mbit(cpu, 6);
+}
+
+fn bit_mhl_7(cpu: &mut Cpu) {
+    set_mbit(cpu, 7);
+}
+
+//Function to clear one bit in a u8
+fn res(value: &u8, bit: u8) -> u8 {
+    value & !(1u8 << (bit as usize))
+}
+
+fn set_res(bit: u8, register: &mut u8) {
+    let res = res(register, bit);
+    *register = res;
+}
+
+fn res_a_0(cpu: &mut Cpu) {
+    set_res(0, &mut cpu.registers.a);
+}
+
+fn res_a_1(cpu: &mut Cpu) {
+    set_res(1, &mut cpu.registers.a);
+}
+
+fn res_a_2(cpu: &mut Cpu) {
+    set_res(2, &mut cpu.registers.a);
+}
+
+fn res_a_3(cpu: &mut Cpu) {
+    set_res(3, &mut cpu.registers.a);
+}
+
+fn res_a_4(cpu: &mut Cpu) {
+    set_res(4, &mut cpu.registers.a);
+}
+
+fn res_a_5(cpu: &mut Cpu) {
+    set_res(5, &mut cpu.registers.a);
+}
+
+fn res_a_6(cpu: &mut Cpu) {
+    set_res(6, &mut cpu.registers.a);
+}
+
+fn res_a_7(cpu: &mut Cpu) {
+    set_res(7, &mut cpu.registers.a);
+}
