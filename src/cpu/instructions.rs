@@ -1,4 +1,4 @@
-use crate::cpu::Cpu;
+use super::Cpu;
 
 pub static OPCODES: [(fn(&mut Cpu), &str); 0x100] = [
     //Opcodes 0X

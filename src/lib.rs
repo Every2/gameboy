@@ -1,3 +1,4 @@
+mod cpu;
 mod ram;
 mod hardware;
-mod cpu;
+mod gpu;
