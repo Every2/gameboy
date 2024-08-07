@@ -1,5 +1,8 @@
-use crate::{hardware::Hardware, registers::Registers};
-
+use registers::Registers;
+use crate::hardware::Hardware;
+mod bit_operations;
+mod instructions;
+mod registers;
 
 pub struct Cpu {
     pub registers: Registers,
