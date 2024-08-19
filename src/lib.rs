@@ -1,4 +1,4 @@
 mod cpu;
-mod ram;
 mod hardware;
-mod gpu;
+mod ppu;
+mod ram;
