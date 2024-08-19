@@ -133,7 +133,7 @@ impl Sprite {
     }
 }
 
-struct ppu {
+struct Ppu {
     vram: [u8; 0x2000],
     tile_set: [Tile; 384],
     //Gameboy ppu can display 40 objects (sprites)
