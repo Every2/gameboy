@@ -1,5 +1,3 @@
-use std::arch::x86_64;
-
 const HBLANK_TIME: u16 = 456;
 const HBLANK_OAMACESS: u16 = 80;
 const HBLANK_SYNC: u16 = 252;
@@ -19,6 +17,21 @@ type Tile = [[TilePixelValue; 8]; 8];
 fn empty_tile() -> Tile {
     [[TilePixelValue::Zero; 8]; 8]
 }
+
+#[derive(Clone, Copy, PartialEq)]
+enum Color {
+    White = 255,
+    LightGray = 192,
+    DarkGray = 96,
+    Black = 0,
+}
+
+#[derive(Clone, Copy)]
+struct Tonality {
+    color: Color,
+    opacity: bool,
+}
+
 
 #[derive(Clone, Copy)]
 enum Pallete {
@@ -41,6 +54,21 @@ impl std::convert::From<Mode> for u8 {
             Mode::Vblank => 1,
             Mode::OAMAccess => 2,
             Mode::VRAMAccess => 3,
+        }
+    }
+}
+
+#[derive(Clone, Copy)]
+enum TileSet {
+    Set0,
+    Set1
+}
+
+impl TileSet {
+    fn tile_addr(self, tile: u8) -> u16 {
+        match self {
+            TileSet::Set0 => (0x1000 + (((tile as i8) as i16) * 16)) as u16,
+            TileSet::Set1 => 0x0 + (tile as u16) * 16,
         }
     }
 }
@@ -156,6 +184,12 @@ struct Ppu {
     hb_interrupt_enabled: bool,
     line_cache: [[Option<u8>; 10]; 144],
     sprite_size: SpriteSize,
+    window_enabled: bool,
+    window_x: u8,
+    window_y: u8,
+    bg_enabled: bool,
+    window_tile_map: TileMap,
+    bg_win_tile_set: TileSet,
 }
 
 impl Ppu {
@@ -176,6 +210,12 @@ impl Ppu {
             hb_interrupt_enabled: false,
             line_cache: [[None; 10]; 144],
             sprite_size: SpriteSize::Size8x8,
+            window_enabled: false,
+            window_x: 0,
+            window_y: 0,
+            bg_enabled: false,
+            window_tile_map: TileMap::Low,
+            bg_win_tile_set: TileSet::Set0,
         }
     }
 
@@ -350,10 +390,56 @@ impl Ppu {
 
         self.update_ldc_status();
     }
-    
-    fn render_pixel(&mut self,x: u8, y: u8) {
-        todo!()
+
+    fn pixel_color(&self, tile: u8, x: u8, y: u8, set: TileSet) -> Color {
+        if x >= 8 || y >= 16 {
+            panic!("Out of range");
+        }
+
+        let base = set.tile_addr(tile);
+
+        let address = base + 2 * (y as u16);
+
+        let address = address as usize;
+        let x = (7 - x) as usize;
+
+        let lsb = (self.vram[address] >> x) & 1;
+        let msb = (self.vram[address + 1] >> x) & 1;
+        
+        match (msb << 1) | lsb {
+            0 => Color::White,
+            1 => Color::LightGray,
+            2 => Color::DarkGray,
+            3 => Color::Black,
+            _ => panic!("Invalid Color"),
+        }
     }
+    
+    fn render_pixel(&mut self, x: u8, y: u8) {
+        let wx = self.window_x - 7;
+        let position = x >= wx && y >= self.window_y;
+
+        let background_calor = if self.window_enabled && position {
+            self.window_color(x, y)
+        } else if self.bg_enabled {
+            self.background_color(x, y)
+        } else {
+            Tonality { color: Color::White, opacity: false}
+        };
+    }
+
+    fn window_color(&mut self, x: u8, y: u8) -> Tonality {
+        let wx = self.window_x - 7;
+        let px = x - wx;
+        let py = y - self.window_y;
+
+        let map = self.window_tile_map;
+        let set = self.bg_win_tile_set;
+
+        self.bg_win_color(px, py, map, set)
+    }
+
+    fn bg_win_color(&self, x: u8, y: u8, map: TileMap, set: TileSet) -> Tonality {todo!()}
 
     fn update_ldc_status(&self) {
         todo!()
