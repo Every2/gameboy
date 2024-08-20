@@ -1,3 +1,11 @@
+use std::arch::x86_64;
+
+const HBLANK_TIME: u16 = 456;
+const HBLANK_OAMACESS: u16 = 80;
+const HBLANK_SYNC: u16 = 252;
+const VBLANK_TIME: u8 = 154;
+const VSYNC: u8 = 144;
+
 #[derive(Clone, Copy)]
 enum TilePixelValue {
     Zero,
@@ -16,25 +24,6 @@ fn empty_tile() -> Tile {
 enum Pallete {
     Zero,
     One,
-}
-
-#[derive(Eq, PartialEq)]
-enum Interrupts {
-    None,
-    VBlank,
-    LCDStat,
-    Both,
-}
-
-impl Interrupts {
-    fn add(&mut self, other: Interrupts) {
-        match self {
-            Interrupts::None => *self = other,
-            Interrupts::VBlank if other == Interrupts::LCDStat => *self = Interrupts::Both,
-            Interrupts::LCDStat if other == Interrupts::VBlank => *self = Interrupts::Both,
-            _ => {}
-        };
-    }
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -303,5 +292,70 @@ impl Ppu {
     }
    
 
+    fn step(&mut self) {
+        if !self.lcd_enabled {
+            return;
+        }
+
+        self.cycles = self.cycles + 1 % HBLANK_TIME;
+
+        let mode = self.mode;
+
+        let new_mode = match mode {
+            Mode::Vblank => {
+                if self.cycles == 0 {
+                    self.line = (self.line + 1) % VBLANK_TIME;
+
+                    if self.line == 0 {
+                        Mode::OAMAccess
+                    } else {
+                        mode
+                    }
+                } else {
+                    mode
+                }
+            }
+            _ => {
+                match self.cycles {
+                    0 => {
+                        self.line += 1;
+                        if self.line == VSYNC {
+                           self.vb_interrupt_enabled = true;
+                           Mode::Vblank 
+                        } else {
+                            Mode::OAMAccess
+                        }
+                    }
+                    HBLANK_TIME => Mode::VRAMAccess,
+                    HBLANK_SYNC => Mode::Hblank,
+                    _ => mode
+                }
+            }
+        };
+
+        self.mode = new_mode;
+
+        let line_start = HBLANK_TIME + match self.line {
+            0 => 160,
+            _ => 48,
+        };
+
+        if self.cycles == line_start && self.mode != Mode::Vblank {
+            
+
+            for x in 0..160 {
+                self.render_pixel(x, self.line);
+            }
+        }
+
+        self.update_ldc_status();
+    }
     
+    fn render_pixel(&mut self,x: u8, y: u8) {
+        todo!()
+    }
+
+    fn update_ldc_status(&self) {
+        todo!()
+    }
 }
