@@ -1,3 +1,7 @@
+use sprite::Sprite;
+
+mod sprite;
+
 const HBLANK_TIME: u16 = 456;
 const HBLANK_OAMACESS: u16 = 80;
 const HBLANK_SYNC: u16 = 252;
@@ -33,11 +37,7 @@ struct Tonality {
 }
 
 
-#[derive(Clone, Copy)]
-enum Pallete {
-    Zero,
-    One,
-}
+
 
 #[derive(Clone, Copy, PartialEq)]
 enum Mode {
@@ -105,67 +105,7 @@ impl TileMap {
     }
 }
 
-#[derive(Clone, Copy)]
-struct Sprite {
-    x: u8,
-    y: u8,
-    tile: u8,
-    overleap_background: bool,
-    x_flip: bool,
-    y_flip: bool,
-    priority: bool,
-    pallete: Pallete,
-}
 
-impl Sprite {
-    pub fn new() -> Sprite {
-        Sprite {
-            x: 0,
-            y: 0,
-            tile: 0,
-            overleap_background: false,
-            x_flip: false,
-            y_flip: false,
-            priority: false,
-            pallete: Pallete::Zero,
-        }
-    }
-
-    //i8 to avoid overflow
-    fn top_line(&self) -> i32{
-        (self.y as i32) - 16
-    }
-
-    //i8 to avoid overflow
-    fn left_column(&self) -> i32 {
-        (self.x as i32) - 8
-    }
-
-    fn set_flags(&mut self, flags: u8) {
-        self.overleap_background = flags & 0x80 != 0;
-        self.y_flip = flags & 0x40 != 0;
-        self.x_flip = flags & 0x20 != 0;
-        self.pallete = match flags & 0x10 != 0 {
-            false => Pallete::Zero,
-            true => Pallete::One,
-        }
-    }
-
-    fn flags(&self) -> u8 {
-        let mut register_flags = 0;
-
-        register_flags |= (self.overleap_background as u8) << 7;
-        register_flags |= (self.y_flip as u8) << 6;
-        register_flags |= (self.x_flip as u8) << 5;
-
-        register_flags |= match self.pallete {
-            Pallete::Zero => 0,
-            Pallete::One => 1,
-        } << 4;
-
-        register_flags
-    }
-}
 
 struct Ppu {
     vram: [u8; 0x2000],
@@ -424,7 +364,7 @@ impl Ppu {
         } else if self.bg_enabled {
             self.background_color(x, y)
         } else {
-            Tonality { color: Color::White, opacity: false}
+            Tonality  {  color: Color::White, opacity: false }
         };
     }
 
@@ -444,4 +384,6 @@ impl Ppu {
     fn update_ldc_status(&self) {
         todo!()
     }
+
+    fn background_color(&self, x: u8, y: u8) -> Tonality {todo!()}
 }
