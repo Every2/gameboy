@@ -1,6 +1,7 @@
 use sprite::Sprite;
 
 mod sprite;
+mod registers;
 
 const HBLANK_TIME: u16 = 456;
 const HBLANK_OAMACESS: u16 = 80;

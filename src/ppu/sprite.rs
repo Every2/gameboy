@@ -1,5 +1,5 @@
 #[derive(Clone, Copy)]
-enum Pallete {
+pub enum Pallete {
     Zero,
     One,
 }
