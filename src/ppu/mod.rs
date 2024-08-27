@@ -1,7 +1,10 @@
+use interrupts::Interrupts;
+use registers::Registers;
 use sprite::Sprite;
 
 mod sprite;
 mod registers;
+mod interrupts;
 
 const HBLANK_TIME: u16 = 456;
 const HBLANK_OAMACESS: u16 = 80;
@@ -31,14 +34,34 @@ enum Color {
     Black = 0,
 }
 
+impl std::convert::From<Color> for u8 {
+    fn from(value: Color) -> Self {
+        match value {
+            Color::White => 0,
+            Color::LightGray => 1,
+            Color::DarkGray => 2,
+            Color::Black => 3
+        }
+    }
+}
+
+impl std::convert::From<u8> for Color {
+    fn from(value: u8) -> Self {
+        match value {
+            0 => Color::White,
+            1 => Color::LightGray,
+            2 => Color::DarkGray, 
+            3 => Color::Black,
+            _ => panic!("Invalid Color"),
+        }
+    }
+}
+
 #[derive(Clone, Copy)]
 struct Tonality {
     color: Color,
     opacity: bool,
 }
-
-
-
 
 #[derive(Clone, Copy, PartialEq)]
 enum Mode {
@@ -114,22 +137,17 @@ struct Ppu {
     //Gameboy ppu can display 40 objects (sprites)
     oam: [Sprite; 40],
     cycles: u16,
-    lcd_enabled: bool,
     mode: Mode,
+    interrupts: Interrupts,
+    registers: Registers,
     line: u8,
-    vb_interrupt_enabled: bool,
-    oam_is_acessed: bool,
     line_check: u8,
-    lck_interrupt_enabled: bool,
-    line_equals_line_check: bool,
-    hb_interrupt_enabled: bool,
     line_cache: [[Option<u8>; 10]; 144],
     sprite_size: SpriteSize,
-    window_enabled: bool,
     window_x: u8,
     window_y: u8,
-    bg_enabled: bool,
     window_tile_map: TileMap,
+    bg_tile_map: TileMap,
     bg_win_tile_set: TileSet,
 }
 
@@ -140,23 +158,82 @@ impl Ppu {
             tile_set: [empty_tile(); 384],
             oam: [Sprite::new(); 40],
             cycles: 0,
-            lcd_enabled: false,
             mode: Mode::Hblank,
+            interrupts: Interrupts::new(),
+            registers: Registers::new(),
             line: 0,
-            vb_interrupt_enabled: false,
-            oam_is_acessed: false,
             line_check: 0,
-            lck_interrupt_enabled: false,
-            line_equals_line_check: false,
-            hb_interrupt_enabled: false,
             line_cache: [[None; 10]; 144],
             sprite_size: SpriteSize::Size8x8,
-            window_enabled: false,
             window_x: 0,
             window_y: 0,
-            bg_enabled: false,
             window_tile_map: TileMap::Low,
+            bg_tile_map: TileMap::Low,
             bg_win_tile_set: TileSet::Set0,
+        }
+    }
+
+    //LCDC is a special register
+    fn lcdc(&self) -> u8 {
+        let mut result = 0;
+
+        result |= (self.interrupts.is_lcd_enabled as u8) << 7;
+        result |= match self.window_tile_map {
+            TileMap::High => 1,
+            TileMap::Low => 0,
+        } << 6;
+        result |= (self.interrupts.window as u8) << 5;
+        result |= match self.bg_win_tile_set {
+            TileSet::Set1 => 1,
+            TileSet::Set0 => 0,
+        } << 4;
+        result |= match self.bg_tile_map {
+            TileMap::High => 1,
+            TileMap::Low => 0,
+        } << 3;
+        result |= match self.sprite_size {
+            SpriteSize::Size8x16 => 1,
+            SpriteSize::Size8x8 => 0,
+        } << 2;
+        result |= (self.interrupts.sprites as u8) << 1;
+        result |= (self.interrupts.background as u8) << 0;
+
+        result
+    }
+
+    fn set_lcdc(&mut self, value: u8) {
+        self.interrupts.is_lcd_enabled = value & 0x80 != 0;
+        self.window_tile_map = match value & 0x40 != 0 {
+            true => TileMap::High,
+            false => TileMap::Low,
+        };
+        self.interrupts.window = value & 0x20 != 0;
+        self.bg_win_tile_set = match value & 0x10 != 0 {
+            true => TileSet::Set1,
+            false => TileSet::Set0,
+        };
+        self.bg_tile_map = match value & 0x08 != 0 {
+            true => TileMap::High,
+            false => TileMap::Low,
+        };
+        let new_sprite_size = match value & 0x04 != 0 {
+            false => SpriteSize::Size8x8,
+            true => SpriteSize::Size8x16,
+        };
+
+        self.interrupts.sprites = value & 0x02 != 0;
+        self.interrupts.background = value & 0x01 != 0;
+
+        if !self.interrupts.is_lcd_enabled {
+            self.line = 0;
+            self.cycles = 0;
+            self.mode = Mode::OAMAccess;
+        }
+
+        if new_sprite_size != self.sprite_size {
+            self.sprite_size = new_sprite_size;
+
+            self.rebuild_line_cache();
         }
     }
 
@@ -274,7 +351,7 @@ impl Ppu {
    
 
     fn step(&mut self) {
-        if !self.lcd_enabled {
+        if !self.interrupts.is_lcd_enabled {
             return;
         }
 
@@ -301,7 +378,7 @@ impl Ppu {
                     0 => {
                         self.line += 1;
                         if self.line == VSYNC {
-                           self.vb_interrupt_enabled = true;
+                           self.interrupts.vblank = true;
                            Mode::Vblank 
                         } else {
                             Mode::OAMAccess
@@ -347,22 +424,16 @@ impl Ppu {
         let lsb = (self.vram[address] >> x) & 1;
         let msb = (self.vram[address + 1] >> x) & 1;
         
-        match (msb << 1) | lsb {
-            0 => Color::White,
-            1 => Color::LightGray,
-            2 => Color::DarkGray,
-            3 => Color::Black,
-            _ => panic!("Invalid Color"),
-        }
+        Color::from((msb << 1) | lsb)
     }
     
     fn render_pixel(&mut self, x: u8, y: u8) {
         let wx = self.window_x - 7;
         let position = x >= wx && y >= self.window_y;
 
-        let background_calor = if self.window_enabled && position {
+        let background_calor = if self.interrupts.window && position {
             self.window_color(x, y)
-        } else if self.bg_enabled {
+        } else if self.interrupts.background {
             self.background_color(x, y)
         } else {
             Tonality  {  color: Color::White, opacity: false }
@@ -385,6 +456,8 @@ impl Ppu {
     fn update_ldc_status(&self) {
         todo!()
     }
+
+    fn rebuild_line_cache(&mut self) {todo!()}
 
     fn background_color(&self, x: u8, y: u8) -> Tonality {todo!()}
 }
