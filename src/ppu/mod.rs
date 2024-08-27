@@ -1,4 +1,4 @@
-use interrupts::Interrupts;
+use interrupts::{Interrupts, LcdInterrupt};
 use registers::Registers;
 use sprite::Sprite;
 
@@ -453,11 +453,34 @@ impl Ppu {
 
     fn bg_win_color(&self, x: u8, y: u8, map: TileMap, set: TileSet) -> Tonality {todo!()}
 
-    fn update_ldc_status(&self) {
-        todo!()
+    fn update_ldc_status(&mut self) {
+        let mode = self.mode;
+        let level = (self.interrupts.lyc && self.registers.lyc == self.line) ||
+        (self.interrupts.oam_access && mode == Mode::OAMAccess) ||
+        (self.interrupts.vblank && mode == Mode::Vblank) ||
+        (self.interrupts.hblank && mode == Mode::Hblank);
+        
+        match level {
+            true => {
+                if self.interrupts.lcd == LcdInterrupt::Off {
+                    self.interrupts.lcd = LcdInterrupt::EventTrigger;
+                }
+            }
+            false => {
+                if self.interrupts.lcd == LcdInterrupt::On {
+                    self.interrupts.lcd = LcdInterrupt::Off;
+                }
+            }
+        }
     }
 
-    fn rebuild_line_cache(&mut self) {todo!()}
+    fn rebuild_line_cache(&mut self) {
+        self.line_cache = [[None; 10]; 144];
+
+        for i in 0..self.oam.len() {
+            self.cache_sprite(i as u8);
+        }
+    }
 
     fn background_color(&self, x: u8, y: u8) -> Tonality {todo!()}
 }

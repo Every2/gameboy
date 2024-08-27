@@ -30,14 +30,14 @@ impl Pallete {
 }
 
 pub struct Registers {
-    scy: u8,
-    scx: u8,
-    lyc: u8,
-    bgp: Pallete,
-    obp0: Pallete,
-    obp1: Pallete,
-    wy: u8,
-    wx: u8,
+    pub scy: u8,
+    pub scx: u8,
+    pub lyc: u8,
+    pub bgp: Pallete,
+    pub obp0: Pallete,
+    pub obp1: Pallete,
+    pub wy: u8,
+    pub wx: u8,
 }
 
 impl Registers {

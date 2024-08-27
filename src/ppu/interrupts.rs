@@ -1,5 +1,5 @@
 #[derive(PartialEq)]
-enum LcdInterrupt {
+pub enum LcdInterrupt {
     Off,
     EventTrigger,
     On,
