@@ -129,8 +129,6 @@ impl TileMap {
     }
 }
 
-
-
 struct Ppu {
     vram: [u8; 0x2000],
     tile_set: [Tile; 384],
@@ -451,7 +449,30 @@ impl Ppu {
         self.bg_win_color(px, py, map, set)
     }
 
-    fn bg_win_color(&self, x: u8, y: u8, map: TileMap, set: TileSet) -> Tonality {todo!()}
+    fn tile_index(&self, tile_x: u8, tile_y: u8, map: TileMap) -> u8 {
+        let base = map.base();
+
+        let tile_x = tile_x as u16;
+        let tile_y = tile_y as u16;
+
+        let map_addr = base + (tile_y * 32) + tile_x;
+
+        self.vram[map_addr as usize]
+    }
+    
+    fn bg_win_color(&self, x: u8, y: u8, map: TileMap, set: TileSet) -> Tonality {
+        let map_x = x / 8;
+        let map_y = y / 8;
+        let tile_x = x % 8;
+        let tile_y = y % 8;
+
+        let tile = self.tile_index(tile_x, tile_y, map);
+        let tile_color = self.pixel_color(tile, tile_x, tile_y, set);
+
+        Tonality { color: self.registers.bgp.to_color(tile_color), 
+            opacity: tile_color != Color::White }
+    }
+
 
     fn update_ldc_status(&mut self) {
         let mode = self.mode;
@@ -482,5 +503,10 @@ impl Ppu {
         }
     }
 
-    fn background_color(&self, x: u8, y: u8) -> Tonality {todo!()}
+    fn background_color(&self, x: u8, y: u8) -> Tonality {
+        let px = x + self.registers.scx;
+        let py = y + self.registers.scy;
+
+        self.bg_win_color(px, py, self.bg_tile_map, self.bg_win_tile_set)
+    }
 }

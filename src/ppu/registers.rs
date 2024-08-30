@@ -1,7 +1,7 @@
 use super::Color;
 
-struct Pallete {
-    map: [Color; 4],
+pub struct Pallete {
+    pub map: [Color; 4],
 }
 
 impl Pallete {
@@ -26,6 +26,10 @@ impl Pallete {
         }
 
         value
+    }
+
+    pub fn to_color(&self, c: Color) -> Color {
+        self.map[c as usize]
     }
 }
 
