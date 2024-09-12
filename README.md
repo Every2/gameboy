@@ -31,3 +31,6 @@ References:
 
 
 [gb rs - Simia implementation](https://github.com/simias/gb-rs)
+
+
+[rboy - mdvnes implementation](https://github.com/mvdnes/rboy)

@@ -1,4 +1,5 @@
 mod mbc0;
+mod mbc1;
 
 pub trait MBC {
     fn read_rom(&self, address: u16) -> u8;
@@ -26,5 +27,24 @@ pub trait MBC {
         }
 
         result
+    }
+}
+
+fn ram_banks(value: u8) -> usize {
+    match value {
+        1 => 1,
+        2 => 1,
+        3 => 4,
+        4 => 16,
+        5 => 8,
+        _ => 0,
+    }
+}
+
+fn rom_banks(value: u8) -> usize {
+    if value  <= 8 {
+        2 << value
+    } else {
+        0
     }
 }
